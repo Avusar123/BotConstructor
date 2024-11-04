@@ -1,4 +1,4 @@
-package com.botconstructor.model.event;
+package com.botconstructor.model.data.event;
 
 
 /**
