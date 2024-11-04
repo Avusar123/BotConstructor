@@ -1,13 +1,26 @@
-package com.botconstructor.model.action;
+package com.botconstructor.model.data.action;
+import jakarta.persistence.*;
 
 import java.util.List;
-
 /**
  * Описание действия, совершаемого в ответ на внешний триггер.
  */
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING)
 public abstract class Action {
+    @Id
+    @GeneratedValue
+    protected Long id;
+
     protected String name;
+
+    @ManyToMany
     protected List<Action> childActions;
+
+    public Action(String name) {
+        this.name = name;
+    }
 
     public String getName() {
         return name;
