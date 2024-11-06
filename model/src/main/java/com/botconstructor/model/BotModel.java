@@ -1,7 +1,7 @@
 package com.botconstructor.model;
 
-import com.botconstructor.model.data.configuration.ProviderConfig;
-import com.botconstructor.model.data.trigger.Trigger;
+import com.botconstructor.model.configuration.ProviderConfig;
+import com.botconstructor.model.trigger.Trigger;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 
@@ -13,18 +13,18 @@ import java.util.UUID;
  */
 @Entity
 public class BotModel {
+    @Id
+    @GeneratedValue
+    @JsonInclude
+    private UUID id;
 
     @OneToMany
     List<Trigger> triggers;
 
     @OneToOne
     ProviderConfig providerConfig;
-    private String name;
 
-    @Id
-    @GeneratedValue
-    @JsonInclude
-    private UUID id;
+    private String name;
 
     public BotModel(String name) {
         this.name = name;
@@ -38,7 +38,9 @@ public class BotModel {
         this.triggers = triggers;
     }
 
-    public void addTrigger(Trigger trigger) { this.triggers.add(trigger); }
+    public void addTrigger(Trigger trigger) {
+        this.triggers.add(trigger);
+    }
 
     public ProviderConfig getProviderConfig() {
         return providerConfig;

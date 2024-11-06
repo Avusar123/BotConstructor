@@ -1,4 +1,4 @@
-package com.botconstructor.model.data.configuration;
+package com.botconstructor.model.configuration;
 
 
 import jakarta.persistence.*;

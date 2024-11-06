@@ -1,4 +1,4 @@
-package com.botconstructor.model.data.action;
+package com.botconstructor.model.action;
 import jakarta.persistence.*;
 
 import java.util.List;

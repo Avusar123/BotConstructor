@@ -1,7 +1,7 @@
-package com.botconstructor.model.data.trigger;
+package com.botconstructor.model.trigger;
 
-import com.botconstructor.model.data.action.Action;
-import com.botconstructor.model.data.event.Event;
+import com.botconstructor.model.action.Action;
+import com.botconstructor.model.event.Event;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -13,6 +13,10 @@ import java.util.List;
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public abstract class Trigger {
+    @Id
+    @GeneratedValue
+    protected Integer id;
+
     @ManyToMany
     protected List<Trigger> triggers;
 
@@ -20,10 +24,6 @@ public abstract class Trigger {
     protected List<Action> actions;
 
     protected String name;
-
-    @Id
-    @GeneratedValue
-    protected Integer id;
 
     public Trigger(List<Trigger> triggers, List<Action> actions, String name) {
         this.triggers = triggers;

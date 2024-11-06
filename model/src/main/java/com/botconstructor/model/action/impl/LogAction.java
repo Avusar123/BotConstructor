@@ -1,6 +1,6 @@
-package com.botconstructor.model.data.action.impl;
+package com.botconstructor.model.action.impl;
 
-import com.botconstructor.model.data.action.Action;
+import com.botconstructor.model.action.Action;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
