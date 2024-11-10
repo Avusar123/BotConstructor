@@ -1,7 +1,6 @@
 package com.botconstructor.model.configuration.impl;
 
 import com.botconstructor.model.configuration.ProviderConfig;
-import com.botconstructor.model.configuration.ProviderConfigType;
 
 public class TelegramProviderConfig extends ProviderConfig {
     private String token;
@@ -16,10 +15,5 @@ public class TelegramProviderConfig extends ProviderConfig {
 
     public void setToken(String token) {
         this.token = token;
-    }
-
-    @Override
-    public ProviderConfigType toConfigType() {
-        return ProviderConfigType.TELEGRAM;
     }
 }
