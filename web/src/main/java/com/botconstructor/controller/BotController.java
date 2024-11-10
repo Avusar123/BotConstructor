@@ -2,7 +2,6 @@ package com.botconstructor.controller;
 
 import com.botconstructor.model.BotModel;
 import com.botconstructor.repository.BotRepo;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
