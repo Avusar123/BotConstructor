@@ -1,44 +1,31 @@
 package com.botconstructor.model;
 
-import com.botconstructor.model.data.configuration.ProviderConfig;
-import com.botconstructor.model.data.trigger.Trigger;
+import com.botconstructor.model.processingblock.ProcessingBlock;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 
 import java.util.List;
 import java.util.UUID;
 
-/**
- * Модель бота для сохранения в БД.
- */
+import com.botconstructor.model.configuration.ProviderConfig;
+
 @Entity
 public class BotModel {
+    @Id
+    @GeneratedValue
+    private UUID id;
 
     @OneToMany
-    List<Trigger> triggers;
+    List<ProcessingBlock> processingBlocks;
 
     @OneToOne
     ProviderConfig providerConfig;
-    private String name;
 
-    @Id
-    @GeneratedValue
-    @JsonInclude
-    private UUID id;
+    private String name;
 
     public BotModel(String name) {
         this.name = name;
     }
-
-    public List<Trigger> getTriggers() {
-        return triggers;
-    }
-
-    public void setTriggers(List<Trigger> triggers) {
-        this.triggers = triggers;
-    }
-
-    public void addTrigger(Trigger trigger) { this.triggers.add(trigger); }
 
     public ProviderConfig getProviderConfig() {
         return providerConfig;
@@ -62,5 +49,13 @@ public class BotModel {
 
     public void setId(UUID id) {
         this.id = id;
+    }
+
+    public List<ProcessingBlock> getProcessingBlocks() {
+        return processingBlocks;
+    }
+
+    public void setProcessingBlocks(List<ProcessingBlock> processingBlocks) {
+        this.processingBlocks = processingBlocks;
     }
 }

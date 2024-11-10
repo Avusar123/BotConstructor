@@ -1,17 +1,15 @@
-package com.botconstructor.model.data.configuration;
-
+package com.botconstructor.model.event;
 
 import jakarta.persistence.*;
 
-/**
- * Класс метка для конфигуарции провайдера API бота.
- */
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public abstract class ProviderConfig {
+public abstract class Event {
     @Id
     @GeneratedValue
     protected int id;
+
+    public abstract EventType getType();
 
     public int getId() {
         return id;
