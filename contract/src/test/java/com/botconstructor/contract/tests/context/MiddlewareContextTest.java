@@ -10,6 +10,7 @@ import com.botconstructor.contract.testdata.middleware.TestMiddleware;
 import com.botconstructor.model.configuration.ProviderConfig;
 import com.botconstructor.model.configuration.impl.TelegramProviderConfig;
 import com.botconstructor.model.middleware.Middleware;
+import com.botconstructor.model.processingblock.ProcessingBlock;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;

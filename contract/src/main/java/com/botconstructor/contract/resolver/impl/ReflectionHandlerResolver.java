@@ -2,7 +2,9 @@ package com.botconstructor.contract.resolver.impl;
 
 import com.botconstructor.contract.eventserializer.EventSerializer;
 import com.botconstructor.contract.handler.MiddlewareHandler;
+import com.botconstructor.contract.provider.Provider;
 import com.botconstructor.contract.resolver.GenericResolver;
+import com.botconstructor.model.configuration.ProviderConfig;
 import com.botconstructor.model.event.Event;
 import com.botconstructor.model.middleware.Middleware;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,11 @@ public class ReflectionHandlerResolver implements GenericResolver {
     @Override
     public EventSerializer<Event> resolveSerializer(Event event) {
         return getBean(EventSerializer.class, event.getClass());
+    }
+
+    @Override
+    public Provider<ProviderConfig> resolveProvider(ProviderConfig config) {
+        return getBean(Provider.class, config.getClass());
     }
 
     private <T> T getBean(Class<T> superClass, Class<?> genericClass) {
