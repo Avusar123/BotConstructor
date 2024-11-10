@@ -11,10 +11,10 @@ public abstract class Middleware {
 
     protected String name;
 
-    protected int order;
+    protected int orderValue;
 
-    public Middleware(int order) {
-        setOrder(order);
+    public Middleware(int orderValue) {
+        setOrderValue(orderValue);
     }
 
     public int getId() {
@@ -33,15 +33,15 @@ public abstract class Middleware {
         this.name = name;
     }
 
-    public int getOrder() {
-        return order;
+    public int getOrderValue() {
+        return orderValue;
     }
 
-    public void setOrder(int order) {
-        if (order <= 0) {
+    public void setOrderValue(int orderValue) {
+        if (orderValue <= 0) {
             throw new IllegalArgumentException("Порядок не может быть меньше 1");
         }
 
-        this.order = order;
+        this.orderValue = orderValue;
     }
 }
