@@ -1,21 +1,17 @@
 package com.botconstructor.contract.tests.context;
 
 import com.botconstructor.contract.context.MiddlewareContextFactory;
-import com.botconstructor.contract.resolver.impl.MiddlewareHandlerResolver;
+import com.botconstructor.contract.resolver.impl.ReflectionHandlerResolver;
 import com.botconstructor.contract.testdata.handler.TestMiddlewareHandler;
 import com.botconstructor.contract.testdata.handler.TestService;
 import com.botconstructor.contract.testdata.middleware.TestMiddleware;
 import com.botconstructor.model.middleware.Middleware;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class MiddlewareContextTest {
     @Test
@@ -33,7 +29,7 @@ class MiddlewareContextTest {
         context.register(
                 MiddlewareContextFactory.class,
                 TestMiddlewareHandler.class,
-                MiddlewareHandlerResolver.class
+                ReflectionHandlerResolver.class
         );
 
         context.getBeanFactory().registerSingleton("testService", mockService);

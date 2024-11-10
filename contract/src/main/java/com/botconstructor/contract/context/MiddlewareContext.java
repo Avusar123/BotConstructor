@@ -1,22 +1,20 @@
 package com.botconstructor.contract.context;
 
-import com.botconstructor.contract.handler.MiddlewareHandler;
-import com.botconstructor.contract.resolver.HandlerResolver;
+import com.botconstructor.contract.resolver.GenericResolver;
 import com.botconstructor.model.middleware.Middleware;
 
-import java.util.Iterator;
 import java.util.List;
 
 public class MiddlewareContext {
+    private final GenericResolver genericResolver;
+    private final List<Middleware> middlewares;
+    private final MiddlewareContextData middlewareContextData;
     private int next;
 
-    private final HandlerResolver handlerResolver;
-
-    private final List<Middleware> middlewares;
-
-    MiddlewareContext(HandlerResolver resolver, List<Middleware> middlewares) {
-        this.handlerResolver = resolver;
+    MiddlewareContext(GenericResolver genericResolver, List<Middleware> middlewares, MiddlewareContextData middlewareContextData) {
+        this.genericResolver = genericResolver;
         this.middlewares = middlewares;
+        this.middlewareContextData = middlewareContextData;
         reset();
     }
 
@@ -30,7 +28,7 @@ public class MiddlewareContext {
 
     public void next() {
         var middleware = middlewares.get(next - 1);
-        handlerResolver.resolveHandler(middleware).act(middleware, this);
+        genericResolver.resolveHandler(middleware).act(middleware, this);
         next++;
     }
 
@@ -47,6 +45,10 @@ public class MiddlewareContext {
     }
 
     public MiddlewareContext createSubContext(List<Middleware> middlewares) {
-        return new MiddlewareContext(handlerResolver, middlewares);
+        return new MiddlewareContext(genericResolver, middlewares, middlewareContextData);
+    }
+
+    public MiddlewareContextData getContextData() {
+        return middlewareContextData;
     }
 }
