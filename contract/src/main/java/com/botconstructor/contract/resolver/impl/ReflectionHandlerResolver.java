@@ -13,7 +13,10 @@ import org.springframework.stereotype.Component;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Stream;
 
 @Component
 public class ReflectionHandlerResolver implements GenericResolver {
@@ -41,7 +44,17 @@ public class ReflectionHandlerResolver implements GenericResolver {
         for (var bean : beans.values()) {
             Type[] genericInterfaces = bean.getClass().getGenericInterfaces();
 
-            var parametrizedList = Arrays.stream(genericInterfaces).map(t -> (ParameterizedType) t).toList();
+            List<Type> genericList = new ArrayList<>(Arrays.stream(genericInterfaces).toList());
+
+            if (bean.getClass().getSuperclass() != null) {
+                genericList.add(bean.getClass().getGenericSuperclass());
+            }
+
+            var parametrizedList = genericList
+                    .stream()
+                    .filter(t -> t instanceof ParameterizedType)
+                    .map(t -> (ParameterizedType) t)
+                    .toList();
 
             for (var type : parametrizedList) {
                 var args = type.getActualTypeArguments();

@@ -2,15 +2,11 @@ package com.botconstructor.contract.tests.context;
 
 import com.botconstructor.contract.context.MiddlewareContextFactory;
 import com.botconstructor.contract.provider.Provider;
-import com.botconstructor.contract.provider.impl.TelegramProvider;
 import com.botconstructor.contract.resolver.impl.ReflectionHandlerResolver;
 import com.botconstructor.contract.testdata.handler.TestMiddlewareHandler;
 import com.botconstructor.contract.testdata.handler.TestService;
 import com.botconstructor.contract.testdata.middleware.TestMiddleware;
-import com.botconstructor.model.configuration.ProviderConfig;
-import com.botconstructor.model.configuration.impl.TelegramProviderConfig;
 import com.botconstructor.model.middleware.Middleware;
-import com.botconstructor.model.processingblock.ProcessingBlock;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -43,7 +39,10 @@ class MiddlewareContextTest {
 
         var middlewareContextFactory = context.getBean(MiddlewareContextFactory.class);
 
-        var middlewareContext = middlewareContextFactory.withMiddlewares(middlewares).build();
+        var middlewareContext = middlewareContextFactory
+                .withMiddlewares(middlewares)
+                .withProvider(Mockito.spy(Provider.class))
+                .build();
 
         while (middlewareContext.hasNext()) {
             middlewareContext.next();

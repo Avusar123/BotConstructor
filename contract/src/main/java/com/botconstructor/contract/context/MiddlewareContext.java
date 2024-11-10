@@ -1,5 +1,6 @@
 package com.botconstructor.contract.context;
 
+import com.botconstructor.contract.provider.Provider;
 import com.botconstructor.contract.resolver.GenericResolver;
 import com.botconstructor.model.middleware.Middleware;
 
@@ -9,12 +10,14 @@ public class MiddlewareContext {
     private final GenericResolver genericResolver;
     private final List<Middleware> middlewares;
     private final MiddlewareContextData middlewareContextData;
+    private final Provider<?> provider;
     private int next;
 
-    MiddlewareContext(GenericResolver genericResolver, List<Middleware> middlewares, MiddlewareContextData middlewareContextData) {
+    MiddlewareContext(GenericResolver genericResolver, List<Middleware> middlewares, MiddlewareContextData middlewareContextData, Provider<?> provider) {
         this.genericResolver = genericResolver;
         this.middlewares = middlewares;
         this.middlewareContextData = middlewareContextData;
+        this.provider = provider;
         reset();
     }
 
@@ -28,7 +31,8 @@ public class MiddlewareContext {
 
     public void next() {
         var middleware = middlewares.get(next - 1);
-        genericResolver.resolveHandler(middleware).act(middleware, this);
+        middlewareContextData.formatFields(middleware);
+        genericResolver.resolveHandler(middleware).act(middleware, this, provider);
         next++;
     }
 
@@ -45,7 +49,7 @@ public class MiddlewareContext {
     }
 
     public MiddlewareContext createSubContext(List<Middleware> middlewares) {
-        return new MiddlewareContext(genericResolver, middlewares, middlewareContextData);
+        return new MiddlewareContext(genericResolver, middlewares, middlewareContextData, provider);
     }
 
     public MiddlewareContextData getContextData() {

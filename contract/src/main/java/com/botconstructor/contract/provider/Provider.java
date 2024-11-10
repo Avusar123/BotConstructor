@@ -21,4 +21,6 @@ public abstract class Provider<ConfigType extends ProviderConfig> {
     }
 
     public abstract void StartListener();
+
+    public abstract void SendTextMessage(String chatId, String text);
 }
