@@ -8,7 +8,7 @@ import java.lang.annotation.Inherited;
 import java.util.List;
 
 @Entity
-public class ProcessingBlock {
+public class ProcessingBlock implements Cloneable{
     @Id
     @GeneratedValue
     private int id;
@@ -45,5 +45,18 @@ public class ProcessingBlock {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    @Override
+    public ProcessingBlock clone() {
+        try {
+            ProcessingBlock clone = (ProcessingBlock) super.clone();
+
+            clone.middlewares = middlewares.stream().map(Middleware::clone).toList();
+
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 }

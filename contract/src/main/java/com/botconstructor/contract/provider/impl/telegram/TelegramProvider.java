@@ -19,6 +19,7 @@ import org.telegram.telegrambots.meta.generics.TelegramClient;
 
 import java.util.List;
 
+@SuppressWarnings("CallToPrintStackTrace")
 @Component
 public class TelegramProvider
         extends Provider<TelegramProviderConfig>
@@ -32,16 +33,13 @@ public class TelegramProvider
     @Override
     public void StartListener() {
         try {
-            telegramApplication.registerBot(config.getToken(), this);
+            telegramApplication.registerBot(config.getToken(), this).getOkHttpClient();
+
+            telegramClient = new OkHttpTelegramClient(config.getToken());
+
         } catch (TelegramApiException e) {
             throw new RuntimeException("Не удалось зарегистрировать бота!");
         }
-    }
-
-    @Override
-    public void Initialize(TelegramProviderConfig config, List<ProcessingBlock> blocks) {
-        super.Initialize(config, blocks);
-        telegramClient = new OkHttpTelegramClient(config.getToken());
     }
 
     @Override
@@ -55,20 +53,26 @@ public class TelegramProvider
 
     @Override
     public void consume(List<Update> list) {
-        Event event = null;
+        try {
+            Event event = null;
 
-        for (var update : list) {
-            if (update.hasMessage()) {
-                if (update.getMessage().hasText()) {
-                    event = new TextMessageEvent(
-                            update.getMessage().getChat().getId().toString(),
-                            update.getMessage().getText());
+            for (var update : list) {
+                if (update.hasMessage()) {
+                    if (update.getMessage().hasText()) {
+                        event = new TextMessageEvent(
+                                update.getMessage().getChat().getId().toString(),
+                                update.getMessage().getText());
+                    }
+                }
+
+                if (event != null) {
+                    eventProcessor.process(event, getProcessingBlocks(), this);
                 }
             }
-
-            if (event != null) {
-                eventProcessor.process(event, processingBlocks, this);
-            }
+        } catch (Exception e) {
+            System.err.println("Error in task: " + e.getMessage());
+            e.printStackTrace();
         }
+
     }
 }

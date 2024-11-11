@@ -13,7 +13,7 @@ public abstract class Provider<ConfigType extends ProviderConfig> {
     @Autowired
     protected EventProcessor eventProcessor;
 
-    protected List<ProcessingBlock> processingBlocks;
+    private List<ProcessingBlock> processingBlocks;
 
     public void Initialize(ConfigType config, List<ProcessingBlock> blocks) {
         this.config = config;
@@ -23,4 +23,8 @@ public abstract class Provider<ConfigType extends ProviderConfig> {
     public abstract void StartListener();
 
     public abstract void SendTextMessage(String chatId, String text);
+
+    protected List<ProcessingBlock> getProcessingBlocks() {
+        return processingBlocks.stream().map(ProcessingBlock::clone).toList();
+    }
 }

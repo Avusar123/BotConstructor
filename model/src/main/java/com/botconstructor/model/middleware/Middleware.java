@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class Middleware {
+public abstract class Middleware implements Cloneable {
     @Id
     @GeneratedValue
     protected int id;
@@ -43,5 +43,14 @@ public abstract class Middleware {
         }
 
         this.orderValue = orderValue;
+    }
+
+    @Override
+    public Middleware clone() {
+        try {
+            return (Middleware) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 }
