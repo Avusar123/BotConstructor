@@ -21,7 +21,7 @@ import java.util.stream.Stream;
 @Component
 public class ReflectionHandlerResolver implements GenericResolver {
     @Autowired
-    public ApplicationContext context;
+    private ApplicationContext context;
 
     @Override
     public MiddlewareHandler<Middleware> resolveHandler(Middleware middleware) throws IllegalArgumentException {

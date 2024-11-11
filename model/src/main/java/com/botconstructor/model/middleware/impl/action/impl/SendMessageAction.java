@@ -1,5 +1,6 @@
 package com.botconstructor.model.middleware.impl.action.impl;
 
+import com.botconstructor.model.middleware.Middleware;
 import com.botconstructor.model.middleware.impl.action.Action;
 import com.botconstructor.model.utils.ShouldFormat;
 import jakarta.persistence.Entity;

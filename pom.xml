@@ -13,7 +13,7 @@
         <module>model</module>
         <module>service</module>
         <module>web</module>
-        <module>persistent</module>
+        <module>persistent</mo  dule>
         <module>contract</module>
     </modules>
 

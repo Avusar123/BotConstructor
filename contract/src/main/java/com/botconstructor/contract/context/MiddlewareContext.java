@@ -2,8 +2,10 @@ package com.botconstructor.contract.context;
 
 import com.botconstructor.contract.provider.Provider;
 import com.botconstructor.contract.resolver.GenericResolver;
+import com.botconstructor.contract.utils.Middlewares;
 import com.botconstructor.model.middleware.Middleware;
 
+import java.util.Comparator;
 import java.util.List;
 
 public class MiddlewareContext {
@@ -15,7 +17,13 @@ public class MiddlewareContext {
 
     MiddlewareContext(GenericResolver genericResolver, List<Middleware> middlewares, MiddlewareContextData middlewareContextData, Provider<?> provider) {
         this.genericResolver = genericResolver;
-        this.middlewares = middlewares;
+        this.middlewares = middlewares
+                            .stream()
+                            .sorted(Comparator.comparingInt(Middleware::getOrderValue))
+                            .toList();
+        if (!Middlewares.verifyOrders(middlewares)) {
+            throw new IllegalArgumentException("Порядок должен начинаться с 1 и не должен прерываться!");
+        }
         this.middlewareContextData = middlewareContextData;
         this.provider = provider;
         reset();
