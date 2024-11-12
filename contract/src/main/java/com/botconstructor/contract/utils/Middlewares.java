@@ -1,5 +1,7 @@
 package com.botconstructor.contract.utils;
 
+import com.botconstructor.contract.context.MiddlewareContext;
+import com.botconstructor.contract.context.MiddlewareContextData;
 import com.botconstructor.model.middleware.Middleware;
 
 import java.util.List;
@@ -27,5 +29,15 @@ public class Middlewares {
         }
 
         return true;
+    }
+
+    public static void serializeListToContextData(
+            List<String> list,
+            MiddlewareContextData contextData) {
+        for (int i = 0; i < list.size(); i++) {
+            contextData.insert(String.valueOf(i + 1), list.get(i));
+        }
+
+        contextData.insert("size", String.valueOf(list.size()));
     }
 }
