@@ -7,6 +7,7 @@ import com.botconstructor.model.middleware.Middleware;
 import com.botconstructor.model.middleware.impl.GroupMiddleware;
 import com.botconstructor.model.middleware.impl.action.impl.LogAction;
 import com.botconstructor.model.middleware.impl.action.impl.SendMessageAction;
+import com.botconstructor.model.middleware.impl.trigger.impl.CommandMessageTrigger;
 import com.botconstructor.model.middleware.impl.trigger.impl.EqualityTrigger;
 import com.botconstructor.model.middleware.impl.trigger.impl.TextMessageTrigger;
 import com.botconstructor.model.processingblock.ProcessingBlock;
@@ -36,16 +37,23 @@ public class BotController {
                 "1157583330",
                 false));
 
-        middlewares1.add(new GroupMiddleware(2,
-                List.of(new TextMessageTrigger(
-                        1,
-                        "^/send\\s+\\d+\\s+\"[^\"]*\"$"),
-                        new SendMessageAction(
-                                2,
-                                "{message:text}",
-                                "{message:chatId}"))));
+        middlewares1.add(new CommandMessageTrigger(
+                2,
+                "send",
+                2,
+                "sendData"
+        ));
+        middlewares1.add(new SendMessageAction(
+                3,
+                "{sendData:2}",
+                "{sendData:1}"
+        ));
+        middlewares1.add(new LogAction(
+                4,
+                "Отправляю {sendData:2} на {sendData:1}"
+        ));
 
-        var processingBlock1 = new ProcessingBlock(middlewares1, EventType.TEXT_MESSAGE);
+        var processingBlock1 = new ProcessingBlock(middlewares1, EventType.COMMAND_MESSAGE);
 
         var middlewares2 = new ArrayList<Middleware>();
 
@@ -59,8 +67,8 @@ public class BotController {
                 true));
         middlewares2.add(new SendMessageAction(
                 3,
-                "Спасибо за информацию :/",
-                "{message:chatId}"
+                "{message:chatId}: {message:text}",
+                "1157583330"
         ));
 
         var processingBlock2 = new ProcessingBlock(middlewares2, EventType.TEXT_MESSAGE);

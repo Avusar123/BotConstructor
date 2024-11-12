@@ -3,6 +3,7 @@ package com.botconstructor.contract.provider.impl.telegram;
 import com.botconstructor.contract.provider.Provider;
 import com.botconstructor.model.configuration.impl.TelegramProviderConfig;
 import com.botconstructor.model.event.Event;
+import com.botconstructor.model.event.impl.CommandMessageEvent;
 import com.botconstructor.model.event.impl.TextMessageEvent;
 import com.botconstructor.model.processingblock.ProcessingBlock;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,9 +60,28 @@ public class TelegramProvider
             for (var update : list) {
                 if (update.hasMessage()) {
                     if (update.getMessage().hasText()) {
-                        event = new TextMessageEvent(
-                                update.getMessage().getChat().getId().toString(),
-                                update.getMessage().getText());
+                        var message = update.getMessage();
+
+                        var messageText = message.getText();
+
+                        if (messageText.startsWith("/")) {
+                            var commandName = messageText
+                                    .split(" ", 2)[0]
+                                    .substring(1);
+
+                            var paramsString = messageText
+                                    .split(" ", 2)[1];
+
+                            event = new CommandMessageEvent(
+                                    message.getChat().getId().toString(),
+                                    messageText,
+                                    commandName,
+                                    paramsString);
+                        } else {
+                            event = new TextMessageEvent(
+                                    update.getMessage().getChat().getId().toString(),
+                                    update.getMessage().getText());
+                        }
                     }
                 }
 
