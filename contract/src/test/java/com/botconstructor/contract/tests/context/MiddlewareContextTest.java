@@ -1,6 +1,7 @@
 package com.botconstructor.contract.tests.context;
 
 import com.botconstructor.contract.context.MiddlewareContextFactory;
+import com.botconstructor.contract.provider.Provider;
 import com.botconstructor.contract.resolver.impl.ReflectionHandlerResolver;
 import com.botconstructor.contract.testdata.handler.TestMiddlewareHandler;
 import com.botconstructor.contract.testdata.handler.TestService;
@@ -38,7 +39,10 @@ class MiddlewareContextTest {
 
         var middlewareContextFactory = context.getBean(MiddlewareContextFactory.class);
 
-        var middlewareContext = middlewareContextFactory.withMiddlewares(middlewares).build();
+        var middlewareContext = middlewareContextFactory
+                .withMiddlewares(middlewares)
+                .withProvider(Mockito.spy(Provider.class))
+                .build();
 
         while (middlewareContext.hasNext()) {
             middlewareContext.next();

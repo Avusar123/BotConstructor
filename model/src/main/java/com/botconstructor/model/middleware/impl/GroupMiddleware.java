@@ -11,8 +11,9 @@ public class GroupMiddleware extends Middleware {
     @OneToMany
     List<Middleware> middlewares;
 
-    public GroupMiddleware(int order) {
-        super(order);
+    public GroupMiddleware(int orderValue, List<Middleware> middlewares) {
+        super(orderValue);
+        this.middlewares = middlewares;
     }
 
     public List<Middleware> getMiddlewares() {
@@ -21,5 +22,14 @@ public class GroupMiddleware extends Middleware {
 
     public void setMiddlewares(List<Middleware> middlewares) {
         this.middlewares = middlewares;
+    }
+
+    @Override
+    public Middleware clone() {
+        var middleware = (GroupMiddleware) super.clone();
+
+        middleware.middlewares = middlewares.stream().map(Middleware::clone).toList();
+
+        return middleware;
     }
 }

@@ -1,5 +1,6 @@
 package com.botconstructor.contract.context;
 
+import com.botconstructor.contract.provider.Provider;
 import com.botconstructor.contract.resolver.GenericResolver;
 import com.botconstructor.model.middleware.Middleware;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,13 +16,25 @@ public class MiddlewareContextFactory {
 
     private List<Middleware> middlewares;
 
+    private Provider<?> provider;
+
     public MiddlewareContextFactory withMiddlewares(List<Middleware> middlewares) {
         this.middlewares = middlewares;
 
         return this;
     }
 
+    public MiddlewareContextFactory withProvider(Provider<?> provider) {
+        this.provider = provider;
+
+        return this;
+    }
+
     public MiddlewareContext build() {
-        return new MiddlewareContext(resolver, middlewares, new MiddlewareContextData());
+        if (provider == null || middlewares == null) {
+            throw new NullPointerException("Не заданы нужные параметры для создания контекста!");
+        }
+
+        return new MiddlewareContext(resolver, middlewares, new MiddlewareContextData(), provider);
     }
 }

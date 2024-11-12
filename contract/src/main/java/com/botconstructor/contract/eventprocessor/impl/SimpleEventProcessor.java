@@ -3,6 +3,7 @@ package com.botconstructor.contract.eventprocessor.impl;
 import com.botconstructor.contract.context.MiddlewareContext;
 import com.botconstructor.contract.context.MiddlewareContextFactory;
 import com.botconstructor.contract.eventprocessor.EventProcessor;
+import com.botconstructor.contract.provider.Provider;
 import com.botconstructor.contract.resolver.GenericResolver;
 import com.botconstructor.model.event.Event;
 import com.botconstructor.model.processingblock.ProcessingBlock;
@@ -20,7 +21,8 @@ public class SimpleEventProcessor implements EventProcessor {
     private MiddlewareContextFactory middlewareContextFactory;
 
     @Override
-    public void process(Event event, List<ProcessingBlock> processingBlocks) {
+    public void process(Event event, List<ProcessingBlock> processingBlocks, Provider<?> provider) {
+
         var filteredBlocks = filterBlocks(event, processingBlocks);
 
         var serializer = resolver.resolveSerializer(event);
@@ -28,7 +30,10 @@ public class SimpleEventProcessor implements EventProcessor {
         for (var block : filteredBlocks) {
             var middlewares = block.getMiddlewares();
 
-            var context = middlewareContextFactory.withMiddlewares(middlewares).build();
+            var context = middlewareContextFactory
+                    .withMiddlewares(middlewares)
+                    .withProvider(provider)
+                    .build();
 
             serializer.serialize(event, context);
 
