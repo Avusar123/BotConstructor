@@ -13,8 +13,8 @@
         <module>model</module>
         <module>service</module>
         <module>web</module>
-        <module>persistent</module>
-        <module>contract</module>
+        <module>hosting-assembly</module>
+        <module>persistence</module>
     </modules>
 
     <parent>

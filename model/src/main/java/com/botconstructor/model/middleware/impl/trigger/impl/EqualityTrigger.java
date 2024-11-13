@@ -3,7 +3,9 @@ package com.botconstructor.model.middleware.impl.trigger.impl;
 import com.botconstructor.model.middleware.Middleware;
 import com.botconstructor.model.middleware.impl.trigger.Trigger;
 import com.botconstructor.model.utils.ShouldFormat;
+import jakarta.persistence.Entity;
 
+@Entity
 public class EqualityTrigger extends Trigger {
     @ShouldFormat
     private String firstValue;

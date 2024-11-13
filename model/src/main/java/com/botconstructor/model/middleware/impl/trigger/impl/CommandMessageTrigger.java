@@ -2,7 +2,9 @@ package com.botconstructor.model.middleware.impl.trigger.impl;
 
 import com.botconstructor.model.middleware.impl.trigger.Trigger;
 import com.botconstructor.model.utils.ShouldFormat;
+import jakarta.persistence.Entity;
 
+@Entity
 public class CommandMessageTrigger extends Trigger {
     @ShouldFormat
     private String commandName;

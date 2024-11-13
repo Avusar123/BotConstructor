@@ -9,7 +9,9 @@ import org.springframework.context.annotation.ComponentScan;
 @ComponentScan(basePackages = {
         "com.botconstructor.repository",
         "com.botconstructor.controller",
-        "com.botconstructor.contract",
+        "com.botconstructor.hosting",
+        "com.botconstructor.service",
+        "com.botconstructor.dto"
 })
 @EntityScan(basePackages = {
         "com.botconstructor.model"

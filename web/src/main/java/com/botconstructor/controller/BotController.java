@@ -1,82 +1,41 @@
 package com.botconstructor.controller;
 
-import com.botconstructor.contract.resolver.GenericResolver;
-import com.botconstructor.model.configuration.impl.TelegramProviderConfig;
-import com.botconstructor.model.event.EventType;
-import com.botconstructor.model.middleware.Middleware;
-import com.botconstructor.model.middleware.impl.GroupMiddleware;
-import com.botconstructor.model.middleware.impl.action.impl.LogAction;
-import com.botconstructor.model.middleware.impl.action.impl.SendMessageAction;
-import com.botconstructor.model.middleware.impl.trigger.impl.CommandMessageTrigger;
-import com.botconstructor.model.middleware.impl.trigger.impl.EqualityTrigger;
-import com.botconstructor.model.middleware.impl.trigger.impl.TextMessageTrigger;
-import com.botconstructor.model.processingblock.ProcessingBlock;
+import com.botconstructor.dto.data.BotModelDto;
+import com.botconstructor.dto.data.config.ProviderConfigDto;
+import com.botconstructor.hosting.resolver.GenericResolver;
+import com.botconstructor.service.bot.BotService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import java.util.UUID;
 
 @RestController
 public class BotController {
 
     @Autowired
-    private GenericResolver genericResolver;
+    private BotService botService;
 
     @PostMapping("/api/bot")
-    public void createBot(@RequestParam String token)
+    public BotModelDto createBot(@RequestParam String name)
     {
-        var configuration = new TelegramProviderConfig(token);
+        return botService.create(name);
+    }
 
-        var middlewares1 = new ArrayList<Middleware>();
+    @PostMapping("/api/bot/config")
+    public void setConfig(@RequestParam UUID id, @RequestBody ProviderConfigDto config)
+    {
+        botService.setConfig(id, config);
+    }
 
-        middlewares1.add(new EqualityTrigger(
-                1,
-                "{message:chatId}",
-                "1157583330",
-                false));
+    @GetMapping("/api/bot/config")
+    public ProviderConfigDto getConfig(@RequestParam UUID id)
+    {
+        return botService.getConfig(id);
+    }
 
-        middlewares1.add(new CommandMessageTrigger(
-                2,
-                "send",
-                2,
-                "sendData"
-        ));
-        middlewares1.add(new SendMessageAction(
-                3,
-                "{sendData:2}",
-                "{sendData:1}"
-        ));
-        middlewares1.add(new LogAction(
-                4,
-                "Отправляю {sendData:2} на {sendData:1}"
-        ));
-
-        var processingBlock1 = new ProcessingBlock(middlewares1, EventType.COMMAND_MESSAGE);
-
-        var middlewares2 = new ArrayList<Middleware>();
-
-        middlewares2.add(new LogAction(
-                1,
-                "Логирую {message:text} от {message:chatId}"));
-        middlewares2.add(new EqualityTrigger(
-                2,
-                "{message:chatId}",
-                "1157583330",
-                true));
-        middlewares2.add(new SendMessageAction(
-                3,
-                "{message:chatId}: {message:text}",
-                "1157583330"
-        ));
-
-        var processingBlock2 = new ProcessingBlock(middlewares2, EventType.TEXT_MESSAGE);
-
-        var provider = genericResolver.resolveProvider(configuration);
-
-        provider.Initialize(configuration, List.of(processingBlock1, processingBlock2));
-
-        provider.StartListener();
+    @GetMapping("/api/bot")
+    public BotModelDto getBot(@RequestParam UUID id)
+    {
+        return botService.get(id);
     }
 }
