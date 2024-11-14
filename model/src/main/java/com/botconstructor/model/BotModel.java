@@ -18,13 +18,17 @@ public class BotModel {
     @OneToMany
     List<ProcessingBlock> processingBlocks;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     ProviderConfig providerConfig;
 
     private String name;
 
     public BotModel(String name) {
         this.name = name;
+    }
+
+    protected BotModel() {
+
     }
 
     public ProviderConfig getProviderConfig() {
