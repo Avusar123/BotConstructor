@@ -9,9 +9,13 @@ public class LogAction extends Action {
     @ShouldFormat
     private String message;
 
-    public LogAction(int order, String message) {
-        super(order);
+    public LogAction(int order, String message, String name) {
+        super(order, name);
         this.message = message;
+    }
+
+    protected LogAction() {
+
     }
 
     public String getMessage() {

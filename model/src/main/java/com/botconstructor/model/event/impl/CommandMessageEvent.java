@@ -1,6 +1,5 @@
 package com.botconstructor.model.event.impl;
 
-import com.botconstructor.model.event.Event;
 import com.botconstructor.model.event.EventType;
 
 public class CommandMessageEvent extends TextMessageEvent {

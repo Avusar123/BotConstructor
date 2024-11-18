@@ -2,29 +2,47 @@ package com.botconstructor.model.processingblock;
 
 import com.botconstructor.model.event.EventType;
 import com.botconstructor.model.middleware.Middleware;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 
-import java.lang.annotation.Inherited;
 import java.util.List;
 
 @Entity
-public class ProcessingBlock implements Cloneable{
+public class ProcessingBlock implements Cloneable {
+    @OneToMany
+    List<Middleware> middlewares;
+    EventType eventType;
+
+    String name;
     @Id
     @GeneratedValue
     private int id;
 
-    @OneToMany
-    List<Middleware> middlewares;
-
-    EventType eventType;
-
-    public ProcessingBlock(List<Middleware> middlewares, EventType eventType) {
+    public ProcessingBlock(List<Middleware> middlewares, EventType eventType, String name, int id) {
         this.middlewares = middlewares;
         this.eventType = eventType;
+        this.name = name;
+        this.id = id;
+    }
+
+    public ProcessingBlock(List<Middleware> middlewares, EventType eventType, String name) {
+        this.middlewares = middlewares;
+        this.eventType = eventType;
+        this.name = name;
+    }
+
+    protected ProcessingBlock() {
+
     }
 
     public List<Middleware> getMiddlewares() {
         return middlewares;
+    }
+
+    public void addMiddleware(Middleware middleware) {
+        this.middlewares.add(middleware);
     }
 
     public void setMiddlewares(List<Middleware> middlewares) {
@@ -45,6 +63,14 @@ public class ProcessingBlock implements Cloneable{
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override

@@ -1,26 +1,22 @@
 package com.botconstructor.model;
 
+import com.botconstructor.model.configuration.ProviderConfig;
 import com.botconstructor.model.processingblock.ProcessingBlock;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import com.botconstructor.model.configuration.ProviderConfig;
-
 @Entity
 public class BotModel {
+    @OneToMany
+    List<ProcessingBlock> processingBlocks;
+    @OneToOne(cascade = CascadeType.ALL)
+    ProviderConfig providerConfig;
     @Id
     @GeneratedValue
     private UUID id;
-
-    @OneToMany
-    List<ProcessingBlock> processingBlocks;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    ProviderConfig providerConfig;
-
     private String name;
 
     public BotModel(String name) {
@@ -28,7 +24,7 @@ public class BotModel {
     }
 
     protected BotModel() {
-
+        processingBlocks = new ArrayList<>();
     }
 
     public ProviderConfig getProviderConfig() {
@@ -57,6 +53,10 @@ public class BotModel {
 
     public List<ProcessingBlock> getProcessingBlocks() {
         return processingBlocks;
+    }
+
+    public void addProcessingBlock(ProcessingBlock block) {
+        processingBlocks.add(block);
     }
 
     public void setProcessingBlocks(List<ProcessingBlock> processingBlocks) {

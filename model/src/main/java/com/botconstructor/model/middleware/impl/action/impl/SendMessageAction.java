@@ -1,6 +1,5 @@
 package com.botconstructor.model.middleware.impl.action.impl;
 
-import com.botconstructor.model.middleware.Middleware;
 import com.botconstructor.model.middleware.impl.action.Action;
 import com.botconstructor.model.utils.ShouldFormat;
 import jakarta.persistence.Entity;
@@ -13,10 +12,14 @@ public class SendMessageAction extends Action {
     @ShouldFormat
     private String chatId;
 
-    public SendMessageAction(int order, String message, String chatId) {
-        super(order);
+    public SendMessageAction(int order, String message, String chatId, String name) {
+        super(order, name);
         this.message = message;
         this.chatId = chatId;
+    }
+
+    protected SendMessageAction() {
+
     }
 
     public String getMessage() {

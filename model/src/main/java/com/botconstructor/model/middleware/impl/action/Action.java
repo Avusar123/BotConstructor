@@ -5,7 +5,11 @@ import jakarta.persistence.MappedSuperclass;
 
 @MappedSuperclass
 public abstract class Action extends Middleware {
-    public Action(int order) {
-        super(order);
+    public Action(int order, String name) {
+        super(order, name);
+    }
+
+    protected Action() {
+
     }
 }

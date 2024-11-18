@@ -11,9 +11,13 @@ public class GroupMiddleware extends Middleware {
     @OneToMany
     List<Middleware> middlewares;
 
-    public GroupMiddleware(int orderValue, List<Middleware> middlewares) {
-        super(orderValue);
+    public GroupMiddleware(int orderValue, String name, List<Middleware> middlewares) {
+        super(orderValue, name);
         this.middlewares = middlewares;
+    }
+
+    protected GroupMiddleware() {
+
     }
 
     public List<Middleware> getMiddlewares() {

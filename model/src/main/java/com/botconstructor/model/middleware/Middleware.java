@@ -13,8 +13,13 @@ public abstract class Middleware implements Cloneable {
 
     protected int orderValue;
 
-    public Middleware(int orderValue) {
+    public Middleware(int orderValue, String name) {
         setOrderValue(orderValue);
+        this.name = name;
+    }
+
+    protected Middleware() {
+
     }
 
     public int getId() {

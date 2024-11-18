@@ -6,7 +6,8 @@ import com.botconstructor.model.middleware.Middleware;
 import java.util.List;
 
 public class Middlewares {
-    private Middlewares() { }
+    private Middlewares() {
+    }
 
     public static boolean verifyOrders(List<Middleware> middlewares) {
         if (middlewares
