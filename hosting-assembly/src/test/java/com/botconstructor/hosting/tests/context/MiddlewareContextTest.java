@@ -18,10 +18,10 @@ class MiddlewareContextTest {
     @Test
     public void MiddlewareContext_next() {
         var middlewares = new ArrayList<Middleware>(List.of(
-                new TestMiddleware(5, 1),
-                new TestMiddleware(10, 2),
-                new TestMiddleware(15, 3),
-                new TestMiddleware(20, 4)));
+                new TestMiddleware("Test 1", 1),
+                new TestMiddleware("Test 2", 2),
+                new TestMiddleware("Test 3", 3),
+                new TestMiddleware("Test 4", 4)));
 
         var mockService = Mockito.spy(TestService.class);
 
@@ -48,6 +48,6 @@ class MiddlewareContextTest {
             middlewareContext.next();
         }
 
-        Mockito.verify(mockService, Mockito.times(4)).use(Mockito.anyInt());
+        Mockito.verify(mockService, Mockito.times(4)).use(Mockito.anyString());
     }
 }

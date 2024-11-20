@@ -7,7 +7,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 @ComponentScan(basePackages = {
-        "com.botconstructor.repository",
+        "com.botconstructor.persistence",
         "com.botconstructor.controller",
         "com.botconstructor.hosting",
         "com.botconstructor.service",

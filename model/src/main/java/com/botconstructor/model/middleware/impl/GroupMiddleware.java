@@ -1,6 +1,7 @@
 package com.botconstructor.model.middleware.impl;
 
 import com.botconstructor.model.middleware.Middleware;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 
@@ -8,7 +9,7 @@ import java.util.List;
 
 @Entity
 public class GroupMiddleware extends Middleware {
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     List<Middleware> middlewares;
 
     public GroupMiddleware(int orderValue, String name, List<Middleware> middlewares) {
