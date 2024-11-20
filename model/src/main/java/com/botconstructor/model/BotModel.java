@@ -1,34 +1,33 @@
 package com.botconstructor.model;
 
+import com.botconstructor.model.configuration.ProviderConfig;
 import com.botconstructor.model.processingblock.ProcessingBlock;
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.botconstructor.model.utils.RunningStatus;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import com.botconstructor.model.configuration.ProviderConfig;
-
 @Entity
 public class BotModel {
+    @OneToMany
+    List<ProcessingBlock> processingBlocks;
+    @OneToOne(cascade = CascadeType.ALL)
+    ProviderConfig providerConfig;
     @Id
     @GeneratedValue
     private UUID id;
-
-    @OneToMany
-    List<ProcessingBlock> processingBlocks;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    ProviderConfig providerConfig;
-
     private String name;
+    private RunningStatus status;
 
-    public BotModel(String name) {
+    public BotModel(String name, RunningStatus status) {
         this.name = name;
+        this.status = status;
     }
 
     protected BotModel() {
-
+        processingBlocks = new ArrayList<>();
     }
 
     public ProviderConfig getProviderConfig() {
@@ -61,5 +60,17 @@ public class BotModel {
 
     public void setProcessingBlocks(List<ProcessingBlock> processingBlocks) {
         this.processingBlocks = processingBlocks;
+    }
+
+    public void addProcessingBlock(ProcessingBlock block) {
+        processingBlocks.add(block);
+    }
+
+    public RunningStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(RunningStatus status) {
+        this.status = status;
     }
 }

@@ -9,9 +9,13 @@ public class TextMessageTrigger extends Trigger {
     @ShouldFormat
     private String regex;
 
-    public TextMessageTrigger(int order, String regex) {
-        super(order);
+    public TextMessageTrigger(int order, String regex, String name) {
+        super(order, name);
         this.regex = regex;
+    }
+
+    protected TextMessageTrigger() {
+
     }
 
     public String getRegex() {

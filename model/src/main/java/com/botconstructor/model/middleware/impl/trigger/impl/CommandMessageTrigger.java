@@ -17,11 +17,16 @@ public class CommandMessageTrigger extends Trigger {
             int order,
             String commandName,
             int maxParamsCount,
-            String variableToSave) {
-        super(order);
+            String variableToSave,
+            String name) {
+        super(order, name);
         this.commandName = commandName;
         this.maxParamsCount = maxParamsCount;
         this.variableToSave = variableToSave;
+    }
+
+    protected CommandMessageTrigger() {
+
     }
 
     public int getMaxParamsCount() {

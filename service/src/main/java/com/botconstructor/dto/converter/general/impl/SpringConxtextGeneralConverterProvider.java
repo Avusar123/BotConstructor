@@ -20,7 +20,7 @@ public class SpringConxtextGeneralConverterProvider implements ConverterProvider
 
     @Override
     public <MType, DtoType> DtoConverter<MType, DtoType>
-            getConverter(MType model, Class<DtoType> dtoType) {
+    getConverter(MType model, Class<DtoType> dtoType) {
         return (DtoConverter<MType, DtoType>) getBean(model.getClass(), dtoType);
     }
 

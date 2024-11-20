@@ -3,18 +3,18 @@ package com.botconstructor.hosting.testdata.middleware;
 import com.botconstructor.model.middleware.Middleware;
 
 public class TestMiddleware extends Middleware {
-    private int testValue;
+    private String testValue;
 
-    public TestMiddleware(int testValue, int order) {
-        super(order);
+    public TestMiddleware(String testValue, int order) {
+        super(order, testValue);
         this.testValue = testValue;
     }
 
-    public int getTestValue() {
+    public String getTestValue() {
         return testValue;
     }
 
-    public void setTestValue(int testValue) {
+    public void setTestValue(String testValue) {
         this.testValue = testValue;
     }
 }

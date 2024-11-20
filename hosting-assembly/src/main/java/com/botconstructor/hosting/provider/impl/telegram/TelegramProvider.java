@@ -31,12 +31,21 @@ public class TelegramProvider
     @Override
     public void StartListener() {
         try {
-            telegramApplication.registerBot(config.getToken(), this).getOkHttpClient();
+            telegramApplication.registerBot(config.getToken(), this);
 
             telegramClient = new OkHttpTelegramClient(config.getToken());
 
         } catch (TelegramApiException e) {
-            throw new RuntimeException("Не удалось зарегистрировать бота!");
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void StopListener() {
+        try {
+            telegramApplication.unregisterBot(config.getToken());
+        } catch (TelegramApiException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -87,7 +96,7 @@ public class TelegramProvider
                 }
             }
         } catch (Exception e) {
-            System.err.println("Error in task: " + e.getMessage());
+            System.err.println("ОШИБКА во время обработки сообщения: " + e.getMessage());
             e.printStackTrace();
         }
 

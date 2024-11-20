@@ -18,9 +18,9 @@ public class MiddlewareContext {
     MiddlewareContext(GenericResolver genericResolver, List<Middleware> middlewares, MiddlewareContextData middlewareContextData, Provider<?> provider) {
         this.genericResolver = genericResolver;
         this.middlewares = middlewares
-                            .stream()
-                            .sorted(Comparator.comparingInt(Middleware::getOrderValue))
-                            .toList();
+                .stream()
+                .sorted(Comparator.comparingInt(Middleware::getOrderValue))
+                .toList();
         if (!Middlewares.verifyOrders(middlewares)) {
             throw new IllegalArgumentException("Порядок должен начинаться с 1 и не должен прерываться!");
         }

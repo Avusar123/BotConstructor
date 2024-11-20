@@ -6,7 +6,11 @@ import jakarta.persistence.MappedSuperclass;
 @MappedSuperclass
 public abstract class Trigger extends Middleware {
 
-    public Trigger(int order) {
-        super(order);
+    public Trigger(int order, String name) {
+        super(order, name);
+    }
+
+    protected Trigger() {
+
     }
 }
