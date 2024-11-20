@@ -2,7 +2,6 @@ package com.botconstructor.dto.converter.middleware.util.impl;
 
 import com.botconstructor.dto.converter.middleware.util.MiddlewareDtoClassProvider;
 import com.botconstructor.dto.data.middleware.MiddlewareDto;
-import com.botconstructor.model.middleware.Middleware;
 import org.objenesis.Objenesis;
 import org.objenesis.ObjenesisStd;
 import org.reflections.Reflections;
@@ -10,7 +9,6 @@ import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Modifier;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 @Component

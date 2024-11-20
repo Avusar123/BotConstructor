@@ -2,7 +2,6 @@ package com.botconstructor.dto.converter.middleware;
 
 import com.botconstructor.dto.converter.DtoConverter;
 import com.botconstructor.dto.converter.general.ConverterProvider;
-import com.botconstructor.dto.converter.middleware.util.MiddlewareDtoClassProvider;
 import com.botconstructor.dto.data.middleware.MiddlewareDto;
 import com.botconstructor.dto.data.middleware.MiddlewareListElementDto;
 import com.botconstructor.model.middleware.Middleware;

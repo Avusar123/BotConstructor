@@ -1,7 +1,6 @@
 package com.botconstructor.dto.data.middleware.impl.trigger.impl;
 
 import com.botconstructor.dto.data.middleware.impl.trigger.TriggerDto;
-import com.botconstructor.model.utils.ShouldFormat;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotEmpty;
@@ -20,10 +19,10 @@ public class EqualityTriggerDto extends TriggerDto {
 
     @JsonCreator
     protected EqualityTriggerDto(@JsonProperty(value = "first", required = true) String firstValue,
-                              @JsonProperty(value = "last", required = true) String lastValue,
-                              @JsonProperty("inverted") boolean inverted,
-                              @JsonProperty(value = "order", required = true) int order,
-                              @JsonProperty(value = "name", required = true) String name) {
+                                 @JsonProperty(value = "last", required = true) String lastValue,
+                                 @JsonProperty("inverted") boolean inverted,
+                                 @JsonProperty(value = "order", required = true) int order,
+                                 @JsonProperty(value = "name", required = true) String name) {
         super(order, name);
         this.firstValue = firstValue;
         this.lastValue = lastValue;

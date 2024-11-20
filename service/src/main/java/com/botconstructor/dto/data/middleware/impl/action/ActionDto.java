@@ -1,7 +1,6 @@
 package com.botconstructor.dto.data.middleware.impl.action;
 
 import com.botconstructor.dto.data.middleware.MiddlewareDto;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 public abstract class ActionDto extends MiddlewareDto {
     public ActionDto(int order, int id, String name) {

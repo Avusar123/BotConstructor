@@ -41,12 +41,12 @@ public class ProcessingBlock implements Cloneable {
         return middlewares;
     }
 
-    public void addMiddleware(Middleware middleware) {
-        this.middlewares.add(middleware);
-    }
-
     public void setMiddlewares(List<Middleware> middlewares) {
         this.middlewares = middlewares;
+    }
+
+    public void addMiddleware(Middleware middleware) {
+        this.middlewares.add(middleware);
     }
 
     public EventType getEventType() {
