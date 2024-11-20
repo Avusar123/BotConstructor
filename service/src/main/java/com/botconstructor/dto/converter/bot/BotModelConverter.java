@@ -9,11 +9,11 @@ import org.springframework.stereotype.Component;
 public class BotModelConverter implements DtoConverter<BotModel, BotModelDto> {
     @Override
     public BotModelDto toDto(BotModel botModel) {
-        return new BotModelDto(botModel.getId(), botModel.getName());
+        return new BotModelDto(botModel.getId(), botModel.getName(), botModel.getStatus());
     }
 
     @Override
     public BotModel fromDto(BotModelDto botModelDto) {
-        return new BotModel(botModelDto.getName());
+        return new BotModel(botModelDto.getName(), botModelDto.getStatus());
     }
 }

@@ -2,6 +2,7 @@ package com.botconstructor.hosting.utils;
 
 import com.botconstructor.hosting.context.MiddlewareContextData;
 import com.botconstructor.model.middleware.Middleware;
+import com.botconstructor.model.middleware.impl.GroupMiddleware;
 
 import java.util.List;
 
@@ -11,15 +12,21 @@ public class Middlewares {
 
     public static boolean verifyOrders(List<Middleware> middlewares) {
         if (middlewares
-                .stream()
-                .mapToInt(Middleware::getOrderValue)
-                .max()
-                .orElseThrow() != middlewares.size()) {
+                    .stream()
+                    .mapToInt(Middleware::getOrderValue)
+                    .max()
+                    .orElseThrow() != middlewares.size()) {
             return false;
         }
 
         for (var i = 0; i < middlewares.size() - 1; i++) {
-            var current = middlewares.get(i).getOrderValue();
+            var currentMid = middlewares.get(i);
+
+            if (currentMid instanceof GroupMiddleware) {
+                verifyOrders(((GroupMiddleware) currentMid).getMiddlewares());
+            }
+
+            var current = currentMid.getOrderValue();
 
             var next = middlewares.get(i + 1).getOrderValue();
 

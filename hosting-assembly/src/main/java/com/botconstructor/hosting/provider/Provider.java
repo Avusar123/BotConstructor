@@ -22,6 +22,8 @@ public abstract class Provider<ConfigType extends ProviderConfig> {
 
     public abstract void StartListener();
 
+    public abstract void StopListener();
+
     public abstract void SendTextMessage(String chatId, String text);
 
     protected List<ProcessingBlock> getProcessingBlocks() {

@@ -6,12 +6,14 @@ import com.botconstructor.dto.data.middleware.MiddlewareDto;
 import com.botconstructor.dto.data.middleware.MiddlewareListElementDto;
 import com.botconstructor.hosting.utils.Middlewares;
 import com.botconstructor.model.middleware.Middleware;
+import com.botconstructor.model.middleware.impl.GroupMiddleware;
 import com.botconstructor.persistence.repos.MiddlewareRepo;
 import com.botconstructor.persistence.repos.ProcessingBlockRepo;
 import com.botconstructor.service.middleware.MiddlewareService;
-import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -32,7 +34,7 @@ public class DefaultMiddlewareService implements MiddlewareService {
 
     @Override
     @Transactional
-    public MiddlewareDto create(MiddlewareDto dto, int blockId, UUID botId) {
+    public MiddlewareDto create(@Valid MiddlewareDto dto, int blockId, UUID botId) {
         var block = blockRepo.findByIdInBot(botId, blockId).orElseThrow();
 
         var converter = converterProvider.getConverter(Middleware.class, dto);
@@ -45,11 +47,29 @@ public class DefaultMiddlewareService implements MiddlewareService {
             throw new IllegalArgumentException("Порядок должен начинаться с 1 и не должен прерываться!");
         }
 
-        var modifiedMid = middlewareRepo.save(middleware);
+        var modifiedMid = saveMiddleware(middleware);
 
         blockRepo.save(block);
 
         return converter.toDto(modifiedMid);
+    }
+
+    @Override
+    public MiddlewareDto get(int id, UUID botId) {
+        var result = middlewareRepo.findInBotById(id, botId);
+
+        return converterProvider.getConverter(result, MiddlewareDto.class).toDto(result);
+    }
+
+    @Transactional
+    private Middleware saveMiddleware(Middleware middleware) {
+        if (middleware instanceof GroupMiddleware) {
+            for (var mid : ((GroupMiddleware) middleware).getMiddlewares()) {
+                saveMiddleware(mid);
+            }
+        }
+
+        return middlewareRepo.save(middleware);
     }
 
     @Override

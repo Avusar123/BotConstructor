@@ -2,6 +2,7 @@ package com.botconstructor.model;
 
 import com.botconstructor.model.configuration.ProviderConfig;
 import com.botconstructor.model.processingblock.ProcessingBlock;
+import com.botconstructor.model.utils.RunningStatus;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -18,9 +19,11 @@ public class BotModel {
     @GeneratedValue
     private UUID id;
     private String name;
+    private RunningStatus status;
 
-    public BotModel(String name) {
+    public BotModel(String name, RunningStatus status) {
         this.name = name;
+        this.status = status;
     }
 
     protected BotModel() {
@@ -55,11 +58,19 @@ public class BotModel {
         return processingBlocks;
     }
 
+    public void setProcessingBlocks(List<ProcessingBlock> processingBlocks) {
+        this.processingBlocks = processingBlocks;
+    }
+
     public void addProcessingBlock(ProcessingBlock block) {
         processingBlocks.add(block);
     }
 
-    public void setProcessingBlocks(List<ProcessingBlock> processingBlocks) {
-        this.processingBlocks = processingBlocks;
+    public RunningStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(RunningStatus status) {
+        this.status = status;
     }
 }

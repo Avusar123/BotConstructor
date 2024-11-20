@@ -1,6 +1,7 @@
 package com.botconstructor.dto.data.middleware;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.NotBlank;
 
 public abstract class MiddlewareDto {
     @JsonProperty("order")
@@ -10,13 +11,8 @@ public abstract class MiddlewareDto {
     private int id;
 
     @JsonProperty("name")
+    @NotBlank
     private String name;
-
-    @JsonProperty("type")
-    public abstract String getType();
-
-    @JsonProperty("subtype")
-    public abstract String getSubType();
 
     public MiddlewareDto(int order, int id, String name) {
         this.order = order;
@@ -28,6 +24,12 @@ public abstract class MiddlewareDto {
         this.order = order;
         this.name = name;
     }
+
+    @JsonProperty("type")
+    public abstract String getType();
+
+    @JsonProperty("subtype")
+    public abstract String getSubType();
 
     public int getOrder() {
         return order;

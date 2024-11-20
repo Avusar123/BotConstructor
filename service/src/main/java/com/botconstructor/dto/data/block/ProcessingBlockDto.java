@@ -1,20 +1,19 @@
 package com.botconstructor.dto.data.block;
 
-import com.botconstructor.dto.data.middleware.MiddlewareDto;
 import com.botconstructor.model.event.EventType;
-import com.botconstructor.model.processingblock.ProcessingBlock;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
-import java.util.ArrayList;
-import java.util.List;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public class ProcessingBlockDto {
 
     @JsonProperty("name")
+    @NotBlank
     private String name;
 
     @JsonProperty("eventType")
+    @NotNull
     private EventType eventType;
 
     @JsonProperty("id")

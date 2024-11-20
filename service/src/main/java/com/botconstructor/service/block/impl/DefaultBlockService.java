@@ -7,14 +7,18 @@ import com.botconstructor.model.processingblock.ProcessingBlock;
 import com.botconstructor.persistence.repos.BotRepo;
 import com.botconstructor.persistence.repos.ProcessingBlockRepo;
 import com.botconstructor.service.block.BlockService;
-import jakarta.transaction.Transactional;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
 import java.util.UUID;
 
 @Service
+@Validated
 public class DefaultBlockService implements BlockService {
     @Autowired
     private ConverterProvider converterProvider;
@@ -27,7 +31,10 @@ public class DefaultBlockService implements BlockService {
 
     @Override
     @Transactional
-    public ProcessingBlockDto create(String name, EventType eventType, UUID botId) {
+    public ProcessingBlockDto create(
+            @NotBlank String name,
+            @NotNull EventType eventType,
+            UUID botId) {
         var block = new ProcessingBlock(List.of(), eventType, name);
 
         processingBlockRepo.save(block);
