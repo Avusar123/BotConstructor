@@ -1,10 +1,14 @@
 package com.botconstructor.model.middleware;
 
+import com.botconstructor.model.validationutil.Validatable;
+import com.botconstructor.model.validationutil.Validator;
 import jakarta.persistence.*;
+
+import java.util.Comparator;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class Middleware implements Cloneable {
+public abstract class Middleware implements Validatable, Cloneable {
     @Id
     @GeneratedValue
     protected int id;
@@ -57,5 +61,17 @@ public abstract class Middleware implements Cloneable {
         } catch (CloneNotSupportedException e) {
             throw new AssertionError();
         }
+    }
+
+    @Override
+    public Validator validator(Validator validator) {
+        return validator
+                .withExportedValue("order", orderValue)
+                .ifNotFirst()
+                .compareWithPrevious("order", (o1, o2) -> o1 + 1 == o2)
+                .withErrorMessage("Порядок не должен прерываться!")
+                .ifFirst()
+                .assure(orderValue == 1)
+                .withErrorMessage("Порядок должен начинаться с 1!");
     }
 }

@@ -4,9 +4,10 @@ import com.botconstructor.dto.converter.general.ConverterProvider;
 import com.botconstructor.dto.converter.middleware.MiddlewareListElementDtoConverter;
 import com.botconstructor.dto.data.middleware.MiddlewareDto;
 import com.botconstructor.dto.data.middleware.MiddlewareListElementDto;
-import com.botconstructor.hosting.utils.Middlewares;
 import com.botconstructor.model.middleware.Middleware;
 import com.botconstructor.model.middleware.impl.GroupMiddleware;
+import com.botconstructor.model.validationutil.Validatable;
+import com.botconstructor.model.validationutil.Validations;
 import com.botconstructor.persistence.repos.MiddlewareRepo;
 import com.botconstructor.persistence.repos.ProcessingBlockRepo;
 import com.botconstructor.service.middleware.MiddlewareService;
@@ -15,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -34,24 +37,36 @@ public class DefaultMiddlewareService implements MiddlewareService {
 
     @Override
     @Transactional
-    public MiddlewareDto create(@Valid MiddlewareDto dto, int blockId, UUID botId) {
+    public List<MiddlewareDto> createMany(@Valid List<MiddlewareDto> dtoList, int blockId, UUID botId) {
         var block = blockRepo.findByIdInBot(botId, blockId).orElseThrow();
 
-        var converter = converterProvider.getConverter(Middleware.class, dto);
+        dtoList = dtoList.stream().sorted(Comparator.comparingInt(MiddlewareDto::getOrder)).toList();
 
-        var middleware = converter.fromDto(dto);
+        List<MiddlewareDto> result = new ArrayList<>();
 
-        block.addMiddleware(middleware);
+        for (var dto : dtoList) {
+            var converter = converterProvider.getConverter(Middleware.class, dto);
 
-        if (!Middlewares.verifyOrders(block.getMiddlewares())) {
-            throw new IllegalArgumentException("Порядок должен начинаться с 1 и не должен прерываться!");
+            var middleware = converter.fromDto(dto);
+
+            block.addMiddleware(middleware);
+
+            result.add(converter.toDto(saveMiddleware(middleware)));
+
+            blockRepo.save(block);
         }
 
-        var modifiedMid = saveMiddleware(middleware);
+        var validResult = Validations
+                .isValid(block.getMiddlewares()
+                        .stream()
+                        .map(mid -> (Validatable) mid)
+                        .toList());
 
-        blockRepo.save(block);
+        if (!validResult.result()) {
+            throw new IllegalArgumentException(validResult.message());
+        }
 
-        return converter.toDto(modifiedMid);
+        return result;
     }
 
     @Override

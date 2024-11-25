@@ -1,6 +1,8 @@
 package com.botconstructor.model.middleware.impl;
 
 import com.botconstructor.model.middleware.Middleware;
+import com.botconstructor.model.validationutil.Validatable;
+import com.botconstructor.model.validationutil.Validator;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
@@ -36,5 +38,15 @@ public class GroupMiddleware extends Middleware {
         middleware.middlewares = middlewares.stream().map(Middleware::clone).toList();
 
         return middleware;
+    }
+
+    @Override
+    public Validator validator(Validator validator) {
+        return super
+                .validator(validator)
+                .validateCollection(middlewares
+                                    .stream()
+                                    .map(mid -> (Validatable)mid)
+                                    .toList());
     }
 }

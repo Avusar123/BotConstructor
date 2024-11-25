@@ -3,7 +3,7 @@ package com.botconstructor.hosting.handler.impl.trigger;
 import com.botconstructor.hosting.context.MiddlewareContext;
 import com.botconstructor.hosting.handler.MiddlewareHandler;
 import com.botconstructor.hosting.provider.Provider;
-import com.botconstructor.hosting.utils.Middlewares;
+import com.botconstructor.hosting.utils.Contexts;
 import com.botconstructor.model.middleware.impl.trigger.impl.CommandMessageTrigger;
 import org.springframework.stereotype.Component;
 
@@ -20,12 +20,16 @@ public class CommandMessageTriggerHandler implements MiddlewareHandler<CommandMe
             context.end();
         }
 
-        var paramsList = new ArrayList<>(
-                List.of(
-                        contextData.getValue("command:params")
-                                .split(" ", middleware.getMaxParamsCount())
-                ));
+        List<String> paramsList;
 
-        Middlewares.serializeListToContextData(paramsList, contextData);
+        if (middleware.getMaxParamsCount() > 0) {
+            paramsList = new ArrayList<>(
+                    List.of(
+                            contextData.getValue("command:params")
+                                    .split(" ", middleware.getMaxParamsCount())
+            ));
+
+            Contexts.serializeListToContextData(paramsList, contextData);
+        }
     }
 }
