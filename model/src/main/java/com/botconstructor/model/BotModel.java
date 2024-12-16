@@ -2,6 +2,7 @@ package com.botconstructor.model;
 
 import com.botconstructor.model.configuration.ProviderConfig;
 import com.botconstructor.model.processingblock.ProcessingBlock;
+import com.botconstructor.model.user.UserModel;
 import com.botconstructor.model.utils.RunningStatus;
 import jakarta.persistence.*;
 
@@ -20,6 +21,8 @@ public class BotModel {
     private UUID id;
     private String name;
     private RunningStatus status;
+    @JoinColumn(name = "owner_id")
+    private UserModel owner;
 
     public BotModel(String name, RunningStatus status) {
         this.name = name;
