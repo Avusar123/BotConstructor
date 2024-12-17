@@ -3,8 +3,10 @@ package com.botconstructor.dto.data.middleware;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.UUID;
+
 public class MiddlewareListElementDto {
-    private int id;
+    private UUID id;
 
     private int order;
 
@@ -15,7 +17,7 @@ public class MiddlewareListElementDto {
     private String subtype;
 
     public MiddlewareListElementDto(int order,
-                                    int id,
+                                    UUID id,
                                     String name,
                                     String type,
                                     String subtype) {
@@ -34,11 +36,11 @@ public class MiddlewareListElementDto {
         this.order = order;
     }
 
-    public int getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

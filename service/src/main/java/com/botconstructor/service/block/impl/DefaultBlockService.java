@@ -10,6 +10,8 @@ import com.botconstructor.service.block.BlockService;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
@@ -31,6 +33,8 @@ public class DefaultBlockService implements BlockService {
 
     @Override
     @Transactional
+    @PreAuthorize("@ownershipChecker" +
+            ".isOwner(#botId, T(com.botconstructor.model.BotModel))")
     public ProcessingBlockDto create(
             @NotBlank String name,
             @NotNull EventType eventType,
@@ -49,6 +53,8 @@ public class DefaultBlockService implements BlockService {
     }
 
     @Override
+    @PreAuthorize("@ownershipChecker" +
+            ".isOwner(#botId, T(com.botconstructor.model.BotModel))")
     public List<ProcessingBlockDto> getAll(UUID botId) {
         var blocks = processingBlockRepo.findBlocks(botId);
 

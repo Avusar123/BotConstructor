@@ -6,6 +6,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 
+import java.util.UUID;
+
 public class CommandMessageTriggerDto extends TriggerDto {
     @JsonProperty("commandName")
     @NotBlank
@@ -18,7 +20,12 @@ public class CommandMessageTriggerDto extends TriggerDto {
     @NotBlank
     private String variableToSave;
 
-    public CommandMessageTriggerDto(int order, int id, String name, String commandName, int maxParamsCount, String variableToSave) {
+    public CommandMessageTriggerDto(int order,
+                                    UUID id,
+                                    String name,
+                                    String commandName,
+                                    int maxParamsCount,
+                                    String variableToSave) {
         super(order, id, name);
         this.commandName = commandName;
         this.maxParamsCount = maxParamsCount;

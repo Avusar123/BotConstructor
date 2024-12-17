@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -36,5 +37,10 @@ public class BotController {
     @GetMapping("/api/bot")
     public BotModelDto getBot(@RequestParam UUID id) {
         return botService.get(id);
+    }
+
+    @GetMapping("/api/bot/all")
+    public List<BotModelDto> getAll() {
+        return botService.getAll();
     }
 }

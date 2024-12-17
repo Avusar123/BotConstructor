@@ -1,6 +1,5 @@
 package com.botconstructor.model.configuration;
 
-
 import jakarta.persistence.*;
 
 @Entity

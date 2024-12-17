@@ -12,4 +12,9 @@ public class DefaultControllerAdviser {
     public ResponseEntity<String> noSuchElementExceptionHandler() {
         return ResponseEntity.badRequest().body("Element you requested was not found!");
     }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<String> illegalArgumentExceptionHandler(Exception ex) {
+        return ResponseEntity.badRequest().body(ex.getMessage());
+    }
 }

@@ -8,9 +8,9 @@ import java.util.List;
 import java.util.UUID;
 
 public interface MiddlewareService {
-    List<MiddlewareDto> createMany(@Valid List<MiddlewareDto> dtoList, UUID blockId, UUID botId);
+    List<MiddlewareDto> createMany(@Valid List<MiddlewareDto> dtoList, UUID blockId);
 
-    MiddlewareDto get(int id, UUID botId);
+    MiddlewareDto get(UUID id);
 
-    List<MiddlewareListElementDto> getAll(UUID blockId, UUID botId);
+    List<MiddlewareListElementDto> getAll(UUID blockId);
 }

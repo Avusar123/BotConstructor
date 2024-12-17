@@ -6,13 +6,14 @@ import com.botconstructor.model.validationutil.Validator;
 import jakarta.persistence.*;
 
 import java.util.Comparator;
+import java.util.UUID;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Middleware extends OwnedEntity implements Validatable, Cloneable{
     @Id
     @GeneratedValue
-    protected int id;
+    protected UUID id;
 
     protected String name;
 
@@ -27,11 +28,11 @@ public abstract class Middleware extends OwnedEntity implements Validatable, Clo
 
     }
 
-    public int getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

@@ -12,11 +12,14 @@ import com.botconstructor.service.bot.BotService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
+import java.util.List;
 import java.util.UUID;
 
 @Component
@@ -38,6 +41,8 @@ public class DefaultBotService implements BotService {
     }
 
     @Override
+    @PreAuthorize("@ownershipChecker" +
+            ".isOwner(#botId, T(com.botconstructor.model.BotModel))")
     public BotModelDto get(UUID botId) {
         var bot = botRepo.findById(botId).orElseThrow();
 
@@ -45,11 +50,24 @@ public class DefaultBotService implements BotService {
     }
 
     @Override
+    public List<BotModelDto> getAll() {
+        var bots = botRepo.findAllByOwner(
+                SecurityContextHolder
+                        .getContext()
+                        .getAuthentication()
+                        .getName());
+
+        var converter = converterProvider.getConverter(bots.get(0), BotModelDto.class);
+
+        return bots.stream().map(converter::toDto).toList();
+    }
+
+    @Override
     @Transactional
+    @PreAuthorize("@ownershipChecker" +
+            ".isOwner(#botId, T(com.botconstructor.model.BotModel))")
     public void setConfig(UUID botId, @Valid ProviderConfigDto config) {
         var bot = botRepo.findById(botId).orElseThrow();
-
-        var user = bot.getOwner();
 
         if (bot.getStatus() != RunningStatus.STOPPED && bot.getStatus() != RunningStatus.NOT_INITIALIZED) {
             throw new UnsupportedOperationException("Бот должен находится в состоянии ОСТАНОВЛЕН или НЕ ИНИЦИАЛИЗИРОВАН");
@@ -68,6 +86,8 @@ public class DefaultBotService implements BotService {
     }
 
     @Override
+    @PreAuthorize("@ownershipChecker" +
+            ".isOwner(#botId, T(com.botconstructor.model.BotModel))")
     public ProviderConfigDto getConfig(UUID botId) {
         var bot = botRepo.findById(botId).orElseThrow();
 

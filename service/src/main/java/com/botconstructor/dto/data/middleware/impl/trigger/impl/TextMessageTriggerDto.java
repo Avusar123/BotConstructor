@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 
+import java.util.UUID;
+
 public class TextMessageTriggerDto extends TriggerDto {
     @JsonProperty("regex")
     @NotBlank
@@ -19,7 +21,10 @@ public class TextMessageTriggerDto extends TriggerDto {
         this.regex = regex;
     }
 
-    public TextMessageTriggerDto(int order, int id, String name, String regex) {
+    public TextMessageTriggerDto(int order,
+                                 UUID id,
+                                 String name,
+                                 String regex) {
         super(order, id, name);
         this.regex = regex;
     }

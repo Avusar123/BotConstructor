@@ -6,12 +6,15 @@ import com.botconstructor.dto.data.config.ProviderConfigDto;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface BotService {
     BotModelDto create(@NotBlank String name);
 
     BotModelDto get(UUID botId);
+
+    List<BotModelDto> getAll();
 
     void setConfig(UUID botId, @Valid ProviderConfigDto config);
 
