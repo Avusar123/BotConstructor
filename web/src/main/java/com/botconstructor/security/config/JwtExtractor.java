@@ -2,18 +2,22 @@ package com.botconstructor.security.config;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
 
+import javax.crypto.SecretKey;
+import java.security.Key;
+import java.util.Base64;
 import java.util.Date;
 import java.util.function.Function;
 
 public class JwtExtractor {
     private final String token;
 
-    private final String signingKey;
+    private final Key signingKey;
 
     private Claims claims;
 
-    protected JwtExtractor(String token, String signingKey) {
+    protected JwtExtractor(String token, Key signingKey) {
         this.token = token;
         this.signingKey = signingKey;
     }
@@ -41,9 +45,10 @@ public class JwtExtractor {
 
         var claims = Jwts
             .parser()
-            .setSigningKey(signingKey)
-            .parseClaimsJws(token)
-            .getBody();
+            .verifyWith((SecretKey) signingKey)
+            .build()
+            .parseSignedClaims(token)
+            .getPayload();
 
         this.claims = claims;
 

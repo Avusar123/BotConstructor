@@ -2,29 +2,39 @@ package com.botconstructor.security.config;
 
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.security.Key;
+import java.util.Base64;
 import java.util.Date;
 
 @Service
 public class PropertyJwtConfigurer implements JwtConfigurer {
-    @Value("${jwt.config.expiration}")
-    private Integer expiration;
+    private final Integer expiration;
 
-    @Value("${jwt.config.secret}")
-    private String secret;
+    private final Key secret;
+
+    @Autowired
+    public PropertyJwtConfigurer(
+            @Value("${jwt.config.secret}") String encodedSecret,
+            @Value("${jwt.config.expiration}") Integer expiration) {
+        this.secret = Keys.hmacShaKeyFor(Base64.getDecoder().decode(encodedSecret));
+        this.expiration = expiration;
+    }
 
     @Override
     public JwtBuilder configure(JwtBuilder builder) {
         return builder
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 1000L * expiration))
-                .signWith(SignatureAlgorithm.HS256, secret);
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + 1000L * expiration))
+                .signWith(secret);
     }
 
     @Override
-    public String secret() {
+    public Key secret() {
         return secret;
     }
 }

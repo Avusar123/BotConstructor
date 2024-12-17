@@ -4,7 +4,9 @@ import com.botconstructor.security.config.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,22 +23,29 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        var jwtAuth = (JwtAuthentication)authentication;
+        try {
+            var jwtAuth = (JwtAuthentication)authentication;
 
-        var extractor = jwtService.extractor((String) jwtAuth.getPrincipal());
+            var extractor = jwtService.extractor((String) jwtAuth.getPrincipal());
 
-        if (!extractor.isTokenExpired()) {
-            var userDetails = userDetailsService.loadUserByUsername(extractor.username());
+            if (!extractor.isTokenExpired()) {
+                var userDetails = userDetailsService.loadUserByUsername(extractor.username());
 
-            UsernamePasswordAuthenticationToken result = UsernamePasswordAuthenticationToken.authenticated(
-                    userDetails,
-                    null,
-                    userDetails.getAuthorities());
+                UsernamePasswordAuthenticationToken result = UsernamePasswordAuthenticationToken.authenticated(
+                        userDetails,
+                        null,
+                        userDetails.getAuthorities());
 
-            SecurityContextHolder.getContext().setAuthentication(result);
+                SecurityContextHolder.getContext().setAuthentication(result);
+
+                return result;
+            }
+        } catch (Exception ex) {
+            throw new InternalAuthenticationServiceException(ex.getMessage());
         }
 
-        throw new BadCredentialsException("Token was expired!");
+        throw new BadCredentialsException("Internal authentication error");
+
     }
 
     @Override

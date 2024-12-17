@@ -13,7 +13,8 @@ import org.springframework.context.annotation.ComponentScan;
         "com.botconstructor.service",
         "com.botconstructor.entrypoint",
         "com.botconstructor.security",
-        "com.botconstructor.dto"
+        "com.botconstructor.dto",
+        "com.botconstructor.seed"
 })
 @EntityScan(basePackages = {
         "com.botconstructor.model"

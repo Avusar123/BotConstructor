@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -26,9 +27,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (token != null && token.startsWith("Bearer ")) {
             token = token.substring(7);
 
-            if (SecurityContextHolder.getContext().getAuthentication() != null) {
+            if (SecurityContextHolder.getContext().getAuthentication() == null) {
+                try {
+                    manager.authenticate(new JwtAuthentication(token));
+                } catch (AuthenticationException ex) {
+                    logger.debug("Authentication failure: " + ex.getMessage());
+                }
 
-                manager.authenticate(new JwtAuthentication(token));
             }
         }
 

@@ -1,6 +1,8 @@
 package com.botconstructor.security;
 
 import com.botconstructor.service.user.impl.DefaultUserService;
+import jakarta.servlet.DispatcherType;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -34,18 +36,26 @@ public class SecurityConfiguration {
 
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http,
-                                                       PasswordEncoder encoder,
-                                                       UserDetailsService userDetailsService) throws Exception {
+                                                       ApplicationContext context,
+                                                       DaoAuthenticationProvider daoAuthenticationProvider) throws Exception {
+
+        return http.getSharedObject(AuthenticationManagerBuilder.class)
+                .authenticationProvider(daoAuthenticationProvider)
+                .authenticationProvider(context.getBean(JwtAuthenticationProvider.class))
+                .build();
+    }
+
+    @Bean
+    public DaoAuthenticationProvider daoAuthenticationProvider(
+            UserDetailsService userDetailsService,
+            PasswordEncoder encoder) {
         var dao = new DaoAuthenticationProvider();
 
         dao.setPasswordEncoder(encoder);
 
         dao.setUserDetailsService(userDetailsService);
 
-        return http.getSharedObject(AuthenticationManagerBuilder.class)
-                .authenticationProvider(dao)
-                .authenticationProvider(new JwtAuthenticationProvider())
-                .build();
+        return dao;
     }
 
     @Bean
@@ -56,6 +66,7 @@ public class SecurityConfiguration {
                         auth
                             .requestMatchers("/api/user/*")
                             .permitAll()
+                            .dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.ERROR).permitAll()
                             .anyRequest().authenticated())
                 .logout(Customizer.withDefaults())
                 .sessionManagement(config -> config.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

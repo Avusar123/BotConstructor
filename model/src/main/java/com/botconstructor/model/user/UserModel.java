@@ -1,12 +1,11 @@
 package com.botconstructor.model.user;
 
 import com.botconstructor.model.BotModel;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import org.checkerframework.common.aliasing.qual.Unique;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -17,16 +16,22 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
+
 @Entity
+@Table(
+        name = "user_model",
+        indexes = @Index(name = "idx_username", columnList = "user_name")  // Создаёт индекс на столбце owner_id
+)
 public class UserModel implements UserDetails {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID Id;
 
-    @NotEmpty
+    @Column(name = "user_name", unique = true)
+    @NotBlank
     private String userName;
 
-    @NotEmpty
+    @NotBlank
     private String password;
 
     @OneToMany(mappedBy = "owner")

@@ -5,6 +5,7 @@ import com.botconstructor.model.processingblock.ProcessingBlock;
 import com.botconstructor.model.user.UserModel;
 import com.botconstructor.model.utils.RunningStatus;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +22,7 @@ public class BotModel {
     private UUID id;
     private String name;
     private RunningStatus status;
-    @JoinColumn(name = "owner_id")
+    @ManyToOne
     private UserModel owner;
 
     public BotModel(String name, RunningStatus status) {
@@ -75,5 +76,13 @@ public class BotModel {
 
     public void setStatus(RunningStatus status) {
         this.status = status;
+    }
+
+    public UserModel getOwner() {
+        return owner;
+    }
+
+    public void setOwner(UserModel owner) {
+        this.owner = owner;
     }
 }
