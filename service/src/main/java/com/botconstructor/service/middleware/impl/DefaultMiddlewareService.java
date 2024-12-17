@@ -37,7 +37,7 @@ public class DefaultMiddlewareService implements MiddlewareService {
 
     @Override
     @Transactional
-    public List<MiddlewareDto> createMany(@Valid List<MiddlewareDto> dtoList, int blockId, UUID botId) {
+    public List<MiddlewareDto> createMany(@Valid List<MiddlewareDto> dtoList, UUID blockId, UUID botId) {
         var block = blockRepo.findByIdInBot(botId, blockId).orElseThrow();
 
         dtoList = dtoList.stream().sorted(Comparator.comparingInt(MiddlewareDto::getOrder)).toList();
@@ -88,7 +88,7 @@ public class DefaultMiddlewareService implements MiddlewareService {
     }
 
     @Override
-    public List<MiddlewareListElementDto> getAll(int blockId, UUID botId) {
+    public List<MiddlewareListElementDto> getAll(UUID blockId, UUID botId) {
         var middlewares = middlewareRepo.findAllInBotByBlockId(botId, blockId);
 
         return middlewares.stream()

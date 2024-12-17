@@ -20,5 +20,5 @@ public interface ProcessingBlockRepo extends JpaRepository<ProcessingBlock, Inte
     @Query("SELECT block FROM BotModel bot " +
            "JOIN bot.processingBlocks block " +
            "WHERE bot.id = :botId AND block.id = :blockId")
-    Optional<ProcessingBlock> findByIdInBot(@Param("botId") UUID botId, @Param("blockId") int blockId);
+    Optional<ProcessingBlock> findByIdInBot(@Param("botId") UUID botId, @Param("blockId") UUID blockId);
 }

@@ -32,8 +32,6 @@ public class DefaultBotService implements BotService {
     public BotModelDto create(@NotBlank String name) {
         var bot = new BotModel(name, RunningStatus.NOT_INITIALIZED);
 
-        bot.setOwner((UserModel) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-
         bot = botRepo.save(bot);
 
         return converterProvider.getConverter(bot, BotModelDto.class).toDto(bot);
@@ -50,6 +48,8 @@ public class DefaultBotService implements BotService {
     @Transactional
     public void setConfig(UUID botId, @Valid ProviderConfigDto config) {
         var bot = botRepo.findById(botId).orElseThrow();
+
+        var user = bot.getOwner();
 
         if (bot.getStatus() != RunningStatus.STOPPED && bot.getStatus() != RunningStatus.NOT_INITIALIZED) {
             throw new UnsupportedOperationException("Бот должен находится в состоянии ОСТАНОВЛЕН или НЕ ИНИЦИАЛИЗИРОВАН");

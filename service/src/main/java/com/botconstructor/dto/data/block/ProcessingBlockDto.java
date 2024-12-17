@@ -6,6 +6,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+import java.util.UUID;
+
 public class ProcessingBlockDto {
 
     @JsonProperty("name")
@@ -17,7 +19,7 @@ public class ProcessingBlockDto {
     private EventType eventType;
 
     @JsonProperty("id")
-    private int id;
+    private UUID id;
 
     @JsonCreator
     public ProcessingBlockDto(
@@ -27,7 +29,7 @@ public class ProcessingBlockDto {
         this.eventType = eventType;
     }
 
-    public ProcessingBlockDto(String name, EventType eventType, int id) {
+    public ProcessingBlockDto(String name, EventType eventType, UUID id) {
         this.name = name;
         this.eventType = eventType;
         this.id = id;
@@ -49,11 +51,11 @@ public class ProcessingBlockDto {
         this.name = name;
     }
 
-    public int getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 }

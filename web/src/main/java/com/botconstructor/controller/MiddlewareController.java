@@ -19,7 +19,7 @@ public class MiddlewareController {
 
     @PostMapping("/api/middleware")
     public List<MiddlewareDto> createMiddleware(@Valid @RequestBody List<MiddlewareDto> middlewareDtoList,
-                                     @RequestParam int blockId,
+                                     @RequestParam UUID blockId,
                                      @RequestParam UUID botId) {
         return middlewareService.createMany(middlewareDtoList, blockId, botId);
     }
@@ -31,7 +31,7 @@ public class MiddlewareController {
     }
 
     @GetMapping("/api/middleware/all")
-    public List<MiddlewareListElementDto> getAll(@RequestParam int blockId,
+    public List<MiddlewareListElementDto> getAll(@RequestParam UUID blockId,
                                                  @RequestParam UUID botId) {
         return middlewareService.getAll(blockId, botId);
     }

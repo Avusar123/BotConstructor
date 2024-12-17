@@ -1,5 +1,6 @@
 package com.botconstructor.model.middleware;
 
+import com.botconstructor.model.user.OwnedEntity;
 import com.botconstructor.model.validationutil.Validatable;
 import com.botconstructor.model.validationutil.Validator;
 import jakarta.persistence.*;
@@ -8,7 +9,7 @@ import java.util.Comparator;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class Middleware implements Validatable, Cloneable {
+public abstract class Middleware extends OwnedEntity implements Validatable, Cloneable{
     @Id
     @GeneratedValue
     protected int id;

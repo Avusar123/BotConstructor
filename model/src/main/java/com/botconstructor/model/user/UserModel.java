@@ -20,7 +20,7 @@ import java.util.UUID;
 @Entity
 @Table(
         name = "user_model",
-        indexes = @Index(name = "idx_username", columnList = "user_name")  // Создаёт индекс на столбце owner_id
+        indexes = @Index(name = "idx_username", columnList = "user_name")
 )
 public class UserModel implements UserDetails {
     @Id
@@ -34,7 +34,7 @@ public class UserModel implements UserDetails {
     @NotBlank
     private String password;
 
-    @OneToMany(mappedBy = "owner")
+    @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY)
     private List<BotModel> bots;
 
     public UserModel(String userName, String password) {

@@ -2,6 +2,7 @@ package com.botconstructor.model;
 
 import com.botconstructor.model.configuration.ProviderConfig;
 import com.botconstructor.model.processingblock.ProcessingBlock;
+import com.botconstructor.model.user.OwnedEntity;
 import com.botconstructor.model.user.UserModel;
 import com.botconstructor.model.utils.RunningStatus;
 import jakarta.persistence.*;
@@ -12,8 +13,8 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-public class BotModel {
-    @OneToMany
+public class BotModel extends OwnedEntity {
+    @OneToMany(fetch = FetchType.LAZY)
     List<ProcessingBlock> processingBlocks;
     @OneToOne(cascade = CascadeType.ALL)
     ProviderConfig providerConfig;
@@ -22,8 +23,6 @@ public class BotModel {
     private UUID id;
     private String name;
     private RunningStatus status;
-    @ManyToOne
-    private UserModel owner;
 
     public BotModel(String name, RunningStatus status) {
         this.name = name;
@@ -76,13 +75,5 @@ public class BotModel {
 
     public void setStatus(RunningStatus status) {
         this.status = status;
-    }
-
-    public UserModel getOwner() {
-        return owner;
-    }
-
-    public void setOwner(UserModel owner) {
-        this.owner = owner;
     }
 }

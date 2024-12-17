@@ -14,14 +14,14 @@ public interface MiddlewareRepo extends JpaRepository<Middleware, Integer> {
     @Query("SELECT block.middlewares FROM BotModel bot " +
            "JOIN bot.processingBlocks block " +
            "WHERE bot.id = :botId AND block.id = :blockId")
-    List<Middleware> findAllInBotByBlockId(@Param("botId") UUID botId, @Param("blockId") int blockId);
+    List<Middleware> findAllInBotByBlockId(@Param("botId") UUID botId, @Param("blockId") UUID blockId);
 
     @Query("SELECT middleware FROM BotModel bot " +
            "JOIN bot.processingBlocks block " +
            "JOIN block.middlewares middleware " +
            "WHERE bot.id = :botId AND middleware.id = :id")
     Middleware findInBotById(
-            @Param("id") int id,
+            @Param("id") Integer id,
             @Param("botId") UUID botId);
 
 }

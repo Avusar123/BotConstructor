@@ -2,6 +2,7 @@ package com.botconstructor.controller;
 
 import com.botconstructor.security.config.JwtService;
 import com.botconstructor.service.user.UserService;
+import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
