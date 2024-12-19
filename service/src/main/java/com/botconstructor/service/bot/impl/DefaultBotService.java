@@ -57,6 +57,10 @@ public class DefaultBotService implements BotService {
                         .getAuthentication()
                         .getName());
 
+        if (bots.isEmpty()) {
+            return List.of();
+        }
+
         var converter = converterProvider.getConverter(bots.get(0), BotModelDto.class);
 
         return bots.stream().map(converter::toDto).toList();

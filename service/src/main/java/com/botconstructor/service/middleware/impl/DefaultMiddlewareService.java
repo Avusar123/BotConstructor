@@ -12,6 +12,7 @@ import com.botconstructor.persistence.repos.MiddlewareRepo;
 import com.botconstructor.persistence.repos.ProcessingBlockRepo;
 import com.botconstructor.service.middleware.MiddlewareService;
 import jakarta.validation.Valid;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -54,9 +55,11 @@ public class DefaultMiddlewareService implements MiddlewareService {
 
             var middleware = converter.fromDto(dto);
 
+            middleware = saveMiddleware(middleware);
+
             block.addMiddleware(middleware);
 
-            result.add(converter.toDto(saveMiddleware(middleware)));
+            result.add(converter.toDto(middleware));
 
             blockRepo.save(block);
         }

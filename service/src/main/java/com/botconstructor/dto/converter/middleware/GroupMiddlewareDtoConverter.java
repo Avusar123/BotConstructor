@@ -9,6 +9,8 @@ import com.botconstructor.model.middleware.impl.GroupMiddleware;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public class GroupMiddlewareDtoConverter implements DtoConverter<GroupMiddleware, GroupMiddlewareDto> {
     @Autowired
@@ -23,6 +25,14 @@ public class GroupMiddlewareDtoConverter implements DtoConverter<GroupMiddleware
                 groupMiddleware
                         .getMiddlewares()
                         .stream()
+                        .map(Middleware::clone)
+                        .map(mid -> {
+                            if (mid instanceof GroupMiddleware groupMid) {
+                                groupMid.setMiddlewares(List.of());
+                            }
+
+                            return mid;
+                        })
                         .map(mid -> provider.getConverter(mid, MiddlewareDto.class)
                                 .toDto(mid)).toList()
         );
