@@ -45,6 +45,7 @@ public class GroupMiddleware extends Middleware {
     public Validator validator(Validator validator) {
         return super
                 .validator(validator)
+                .withoutConditions()
                 .validateCollection(middlewares
                                     .stream()
                                     .map(mid -> (Validatable)mid)

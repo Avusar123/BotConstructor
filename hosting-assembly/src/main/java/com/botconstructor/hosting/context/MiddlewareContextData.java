@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 public class MiddlewareContextData {
     Map<String, String> data;
 
-    String field = "";
+    String object = "";
 
     String baseField = "";
 
@@ -19,27 +19,28 @@ public class MiddlewareContextData {
         data = new HashMap<>();
     }
 
-    private MiddlewareContextData(Map<String, String> data, String field, String baseField) {
+    private MiddlewareContextData(Map<String, String> data, String object, String baseField) {
         this.data = data;
-        this.field = field;
+        this.object = object;
         this.baseField = baseField;
     }
 
-    public MiddlewareContextData withField(String field) {
-        return new MiddlewareContextData(data, field, baseField);
+    public MiddlewareContextData withObject(String object) {
+        return new MiddlewareContextData(data, object, baseField);
     }
 
     MiddlewareContextData withBaseField(String baseField) {
-        return new MiddlewareContextData(data, field, baseField);
+        return new MiddlewareContextData(data, object, combine(this.baseField, baseField));
+    }
+
+    private String combine(String... args) {
+        return Arrays.stream(args)
+                .filter(el -> !el.isEmpty())
+                .collect(Collectors.joining(":"));
     }
 
     public void insert(String key, String value) {
-        key  = new ArrayList<>(List.of(baseField, field, key))
-                .stream()
-                .filter(el -> !el.isEmpty())
-                .collect(Collectors.joining(":"));
-
-        data.put(key, value);
+        data.put(combine(baseField, object, key), value);
     }
 
     public String getValue(String key) {
@@ -57,13 +58,27 @@ public class MiddlewareContextData {
     private Map<String, String> getCleanMap() {
         Map<String, String> resultMap = new HashMap<>();
 
+        Map<String, Integer> counter = new HashMap<>();
+
         for (var el : data.keySet()) {
-            if (el.startsWith(baseField + ":")) {
-                resultMap.put(el.substring(baseField.length() + 1), data.get(el));
+            var splittedElement = el.split(":");
+
+            var obj = splittedElement[splittedElement.length - 2];
+
+            var field = splittedElement[splittedElement.length - 1];
+
+            var key = obj + ":" + field;
+
+            var currentField = el.replace(key, "");
+
+            if (!(baseField + ":").startsWith(currentField)) {
+                continue;
             }
 
-            if (!resultMap.containsKey(el)) {
-                resultMap.put(el, data.get(el));
+            if (!counter.containsKey(key) || counter.get(key) <= splittedElement.length) {
+                resultMap.put(key, data.get(el));
+
+                counter.put(key, splittedElement.length);
             }
         }
 

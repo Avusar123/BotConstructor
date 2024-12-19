@@ -14,7 +14,7 @@ import java.util.List;
 public class CommandMessageTriggerHandler implements MiddlewareHandler<CommandMessageTrigger> {
     @Override
     public void act(CommandMessageTrigger middleware, MiddlewareContext context, Provider<?> provider) {
-        var contextData = context.getContextData().withField(middleware.getVariableToSave());
+        var contextData = context.getContextData().withObject(middleware.getVariableToSave());
 
         if (!contextData.getValue("command:name").equals(middleware.getCommandName())) {
             context.end();

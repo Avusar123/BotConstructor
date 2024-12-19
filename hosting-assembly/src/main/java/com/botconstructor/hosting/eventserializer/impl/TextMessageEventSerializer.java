@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 public class TextMessageEventSerializer implements EventSerializer<TextMessageEvent> {
     @Override
     public void serialize(TextMessageEvent event, MiddlewareContext context) {
-        var contextData = context.getContextData().withField("message");
+        var contextData = context.getContextData().withObject("message");
 
         contextData.insert("chatId", event.getChatId());
         contextData.insert("text", event.getMessage());
