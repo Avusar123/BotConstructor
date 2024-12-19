@@ -5,42 +5,73 @@ import com.botconstructor.model.utils.ShouldFormat;
 import org.apache.commons.text.StringSubstitutor;
 
 import java.lang.reflect.Field;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class MiddlewareContextData {
     Map<String, String> data;
 
     String field = "";
 
+    String baseField = "";
+
     public MiddlewareContextData() {
         data = new HashMap<>();
     }
 
-    private MiddlewareContextData(Map<String, String> data, String field) {
+    private MiddlewareContextData(Map<String, String> data, String field, String baseField) {
         this.data = data;
         this.field = field;
+        this.baseField = baseField;
     }
 
     public MiddlewareContextData withField(String field) {
-        return new MiddlewareContextData(data, field);
+        return new MiddlewareContextData(data, field, baseField);
+    }
+
+    MiddlewareContextData withBaseField(String baseField) {
+        return new MiddlewareContextData(data, field, baseField);
     }
 
     public void insert(String key, String value) {
-        if (!Objects.equals(field, "")) {
-            key = field + ":" + key;
-        }
+        key  = new ArrayList<>(List.of(baseField, field, key))
+                .stream()
+                .filter(el -> !el.isEmpty())
+                .collect(Collectors.joining(":"));
 
         data.put(key, value);
     }
 
     public String getValue(String key) {
-        return data.get(key);
+        if (data.containsKey(baseField + key)) {
+            return data.get(baseField + key);
+        }
+
+        if (data.containsKey(key)) {
+            return data.get(key);
+        }
+
+        throw new NoSuchElementException("Контекст не содержит значения по указанному ключу!");
+    }
+
+    private Map<String, String> getCleanMap() {
+        Map<String, String> resultMap = new HashMap<>();
+
+        for (var el : data.keySet()) {
+            if (el.startsWith(baseField + ":")) {
+                resultMap.put(el.substring(baseField.length() + 1), data.get(el));
+            }
+
+            if (!resultMap.containsKey(el)) {
+                resultMap.put(el, data.get(el));
+            }
+        }
+
+        return resultMap;
     }
 
     public void formatFields(Middleware middleware) {
-        var substitutor = new StringSubstitutor(data, "{", "}");
+        var substitutor = new StringSubstitutor(getCleanMap(), "{", "}");
 
         Field[] fields = middleware.getClass().getDeclaredFields();
 

@@ -61,8 +61,11 @@ public class MiddlewareContext {
         next = order;
     }
 
-    public MiddlewareContext createSubContext(List<Middleware> middlewares) {
-        return new MiddlewareContext(genericResolver, middlewares, middlewareContextData, provider);
+    public MiddlewareContext createSubContext(List<Middleware> middlewares, String field) {
+        return new MiddlewareContext(genericResolver,
+                middlewares,
+                middlewareContextData.withBaseField(field),
+                provider);
     }
 
     public MiddlewareContextData getContextData() {
