@@ -5,12 +5,11 @@ import com.botconstructor.model.validationutil.Validatable;
 import com.botconstructor.model.validationutil.Validator;
 import jakarta.persistence.*;
 
-import java.util.Comparator;
 import java.util.UUID;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class Middleware extends OwnedEntity implements Validatable, Cloneable{
+public abstract class Middleware extends OwnedEntity implements Validatable<Middleware>, Cloneable{
     @Id
     @GeneratedValue
     protected UUID id;
@@ -66,11 +65,9 @@ public abstract class Middleware extends OwnedEntity implements Validatable, Clo
     }
 
     @Override
-    public Validator validator(Validator validator) {
+    public Validator<Middleware> validator(Validator<Middleware> validator) {
         return validator
-                .withExportedValue("order", orderValue)
-                .ifNotFirst()
-                .compareWithPrevious("order", (o1, o2) -> o1 + 1 == o2)
+                .compareWithPrevious((mid1,mid2) -> mid1.getOrderValue() == mid2.getOrderValue() + 1)
                 .withErrorMessage("Порядок не должен прерываться!")
                 .ifFirst()
                 .assure(orderValue == 1)

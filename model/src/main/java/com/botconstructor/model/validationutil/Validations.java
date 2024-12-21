@@ -7,15 +7,9 @@ public class Validations {
 
     }
 
-    public static ValidationResult isValid(List<Validatable> validatables) {
-        var context = new ArrayList<Map<String, Integer>>();
-
+    public static <T extends Validatable<T>> ValidationResult isValid(List<T> validatables) {
         for (int i = 0; i < validatables.size(); i++) {
-            context.add(new HashMap<>());
-        }
-
-        for (int i = 0; i < validatables.size(); i++) {
-            var validator = new Validator(validatables, i, context, "Ошибка валидации!");
+            Validator<T> validator = new Validator<>(validatables, i, "Ошибка валидации!");
 
             var validatable = validatables.get(i);
 

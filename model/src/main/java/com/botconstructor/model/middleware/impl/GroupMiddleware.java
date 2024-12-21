@@ -42,13 +42,12 @@ public class GroupMiddleware extends Middleware {
     }
 
     @Override
-    public Validator validator(Validator validator) {
+    public Validator<Middleware> validator(Validator<Middleware> validator) {
         return super
                 .validator(validator)
                 .withoutConditions()
                 .validateCollection(middlewares
-                                    .stream()
-                                    .map(mid -> (Validatable)mid)
-                                    .toList());
+                        .stream()
+                        .toList());
     }
 }

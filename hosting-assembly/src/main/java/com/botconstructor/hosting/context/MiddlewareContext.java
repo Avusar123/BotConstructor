@@ -23,7 +23,7 @@ public class MiddlewareContext {
                 .sorted(Comparator.comparingInt(Middleware::getOrderValue))
                 .toList();
 
-        var validResult = Validations.isValid(middlewares.stream().map(mid -> (Validatable) mid).toList());
+        var validResult = Validations.isValid(middlewares.stream().toList());
 
         if (!validResult.result()) {
             throw new IllegalArgumentException(validResult.message());
