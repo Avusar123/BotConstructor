@@ -10,18 +10,8 @@ import java.util.List;
 import java.util.UUID;
 
 @Repository
-public interface MiddlewareRepo extends JpaRepository<Middleware, Integer> {
-    @Query("SELECT block.middlewares FROM BotModel bot " +
-           "JOIN bot.processingBlocks block " +
-           "WHERE bot.id = :botId AND block.id = :blockId")
-    List<Middleware> findAllInBotByBlockId(@Param("botId") UUID botId, @Param("blockId") int blockId);
-
-    @Query("SELECT middleware FROM BotModel bot " +
-           "JOIN bot.processingBlocks block " +
-           "JOIN block.middlewares middleware " +
-           "WHERE bot.id = :botId AND middleware.id = :id")
-    Middleware findInBotById(
-            @Param("id") int id,
-            @Param("botId") UUID botId);
-
+public interface MiddlewareRepo extends JpaRepository<Middleware, UUID> {
+    @Query("SELECT block.middlewares FROM ProcessingBlock block " +
+           "WHERE block.id = :blockId")
+    List<Middleware> findAllInBlock(@Param("blockId") UUID blockId);
 }

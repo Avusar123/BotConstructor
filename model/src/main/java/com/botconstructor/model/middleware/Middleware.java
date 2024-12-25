@@ -1,13 +1,18 @@
 package com.botconstructor.model.middleware;
 
+import com.botconstructor.model.user.OwnedEntity;
+import com.botconstructor.model.validationutil.Validatable;
+import com.botconstructor.model.validationutil.Validator;
 import jakarta.persistence.*;
+
+import java.util.UUID;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class Middleware implements Cloneable {
+public abstract class Middleware extends OwnedEntity implements Validatable<Middleware>, Cloneable{
     @Id
     @GeneratedValue
-    protected int id;
+    protected UUID id;
 
     protected String name;
 
@@ -22,11 +27,11 @@ public abstract class Middleware implements Cloneable {
 
     }
 
-    public int getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -57,5 +62,15 @@ public abstract class Middleware implements Cloneable {
         } catch (CloneNotSupportedException e) {
             throw new AssertionError();
         }
+    }
+
+    @Override
+    public Validator<Middleware> validator(Validator<Middleware> validator) {
+        return validator
+                .compareWithPrevious((mid1,mid2) -> mid1.getOrderValue() == mid2.getOrderValue() + 1)
+                .withErrorMessage("Порядок не должен прерываться!")
+                .ifFirst()
+                .assure(orderValue == 1)
+                .withErrorMessage("Порядок должен начинаться с 1!");
     }
 }

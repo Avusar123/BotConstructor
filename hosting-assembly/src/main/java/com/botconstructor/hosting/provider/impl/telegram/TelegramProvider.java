@@ -71,12 +71,17 @@ public class TelegramProvider
                         var messageText = message.getText();
 
                         if (messageText.startsWith("/")) {
+
                             var commandName = messageText
                                     .split(" ", 2)[0]
                                     .substring(1);
+                            String paramsString = "";
 
-                            var paramsString = messageText
-                                    .split(" ", 2)[1];
+                            if (messageText.split(" ", 2).length > 1) {
+                                paramsString = messageText
+                                        .split(" ", 2)[1];
+                            }
+
 
                             event = new CommandMessageEvent(
                                     message.getChat().getId().toString(),

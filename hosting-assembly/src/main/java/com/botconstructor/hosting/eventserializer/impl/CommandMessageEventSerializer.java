@@ -15,7 +15,7 @@ public class CommandMessageEventSerializer implements EventSerializer<CommandMes
     public void serialize(CommandMessageEvent event, MiddlewareContext context) {
         textMessageEventSerializer.serialize(event, context);
 
-        var contextData = context.getContextData().withField("command");
+        var contextData = context.getContextData().withObject("command");
 
         contextData.insert("name", event.getCommandName());
 

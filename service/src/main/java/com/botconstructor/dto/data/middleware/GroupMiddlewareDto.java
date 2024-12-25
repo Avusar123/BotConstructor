@@ -4,12 +4,13 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
+import java.util.UUID;
 
 public class GroupMiddlewareDto extends MiddlewareDto {
     @JsonProperty("middlewares")
     private List<MiddlewareDto> middlewares;
 
-    public GroupMiddlewareDto(int order, int id, String name, List<MiddlewareDto> middlewares) {
+    public GroupMiddlewareDto(int order, UUID id, String name, List<MiddlewareDto> middlewares) {
         super(order, id, name);
         this.middlewares = middlewares;
     }

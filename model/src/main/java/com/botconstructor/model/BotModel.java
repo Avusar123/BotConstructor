@@ -2,16 +2,19 @@ package com.botconstructor.model;
 
 import com.botconstructor.model.configuration.ProviderConfig;
 import com.botconstructor.model.processingblock.ProcessingBlock;
+import com.botconstructor.model.user.OwnedEntity;
+import com.botconstructor.model.user.UserModel;
 import com.botconstructor.model.utils.RunningStatus;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 @Entity
-public class BotModel {
-    @OneToMany
+public class BotModel extends OwnedEntity {
+    @OneToMany(fetch = FetchType.LAZY)
     List<ProcessingBlock> processingBlocks;
     @OneToOne(cascade = CascadeType.ALL)
     ProviderConfig providerConfig;

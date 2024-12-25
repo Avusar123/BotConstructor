@@ -4,21 +4,28 @@ import com.botconstructor.dto.converter.general.ConverterProvider;
 import com.botconstructor.dto.converter.middleware.MiddlewareListElementDtoConverter;
 import com.botconstructor.dto.data.middleware.MiddlewareDto;
 import com.botconstructor.dto.data.middleware.MiddlewareListElementDto;
-import com.botconstructor.hosting.utils.Middlewares;
 import com.botconstructor.model.middleware.Middleware;
 import com.botconstructor.model.middleware.impl.GroupMiddleware;
+import com.botconstructor.model.validationutil.Validatable;
+import com.botconstructor.model.validationutil.Validations;
 import com.botconstructor.persistence.repos.MiddlewareRepo;
 import com.botconstructor.persistence.repos.ProcessingBlockRepo;
 import com.botconstructor.service.middleware.MiddlewareService;
 import jakarta.validation.Valid;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
-@Component
+@Service
 public class DefaultMiddlewareService implements MiddlewareService {
     @Autowired
     private MiddlewareRepo middlewareRepo;
@@ -34,29 +41,46 @@ public class DefaultMiddlewareService implements MiddlewareService {
 
     @Override
     @Transactional
-    public MiddlewareDto create(@Valid MiddlewareDto dto, int blockId, UUID botId) {
-        var block = blockRepo.findByIdInBot(botId, blockId).orElseThrow();
+    @PreAuthorize("@ownershipChecker" +
+            ".isOwner(#blockId, T(com.botconstructor.model.processingblock.ProcessingBlock))")
+    public List<MiddlewareDto> createMany(@Valid List<MiddlewareDto> dtoList, UUID blockId) {
+        var block = blockRepo.findById(blockId).orElseThrow();
 
-        var converter = converterProvider.getConverter(Middleware.class, dto);
+        dtoList = dtoList.stream().sorted(Comparator.comparingInt(MiddlewareDto::getOrder)).toList();
 
-        var middleware = converter.fromDto(dto);
+        List<MiddlewareDto> result = new ArrayList<>();
 
-        block.addMiddleware(middleware);
+        for (var dto : dtoList) {
+            var converter = converterProvider.getConverter(Middleware.class, dto);
 
-        if (!Middlewares.verifyOrders(block.getMiddlewares())) {
-            throw new IllegalArgumentException("Порядок должен начинаться с 1 и не должен прерываться!");
+            var middleware = converter.fromDto(dto);
+
+            middleware = saveMiddleware(middleware);
+
+            block.addMiddleware(middleware);
+
+            result.add(converter.toDto(middleware));
+
+            blockRepo.save(block);
         }
 
-        var modifiedMid = saveMiddleware(middleware);
+        var validResult = Validations
+                .isValid(block.getMiddlewares()
+                        .stream()
+                        .toList());
 
-        blockRepo.save(block);
+        if (!validResult.result()) {
+            throw new IllegalArgumentException(validResult.message());
+        }
 
-        return converter.toDto(modifiedMid);
+        return result;
     }
 
     @Override
-    public MiddlewareDto get(int id, UUID botId) {
-        var result = middlewareRepo.findInBotById(id, botId);
+    @PreAuthorize("@ownershipChecker" +
+            ".isOwner(#id, T(com.botconstructor.model.middleware.Middleware))")
+    public MiddlewareDto get(UUID id) {
+        var result = middlewareRepo.findById(id).orElseThrow();
 
         return converterProvider.getConverter(result, MiddlewareDto.class).toDto(result);
     }
@@ -73,8 +97,10 @@ public class DefaultMiddlewareService implements MiddlewareService {
     }
 
     @Override
-    public List<MiddlewareListElementDto> getAll(int blockId, UUID botId) {
-        var middlewares = middlewareRepo.findAllInBotByBlockId(botId, blockId);
+    @PreAuthorize("@ownershipChecker" +
+            ".isOwner(#blockId, T(com.botconstructor.model.processingblock.ProcessingBlock))")
+    public List<MiddlewareListElementDto> getAll(UUID blockId) {
+        var middlewares = middlewareRepo.findAllInBlock(blockId);
 
         return middlewares.stream()
                 .map(mid -> listElementDtoConverter.toDto(mid))

@@ -10,7 +10,12 @@ import org.springframework.stereotype.Component;
 public class GroupMiddlewareHandler implements MiddlewareHandler<GroupMiddleware> {
     @Override
     public void act(GroupMiddleware middleware, MiddlewareContext context, Provider<?> provider) {
-        var subContext = context.createSubContext(middleware.getMiddlewares());
+        var subContext = context.createSubContext(
+                middleware.getMiddlewares(),
+                middleware
+                        .getId()
+                        .toString()
+                        .substring(0, 7));
 
         while (subContext.hasNext()) {
             subContext.next();

@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 
+import java.util.UUID;
+
 public class SendMessageActionDto extends ActionDto {
     @JsonProperty("message")
     @NotBlank
@@ -24,7 +26,7 @@ public class SendMessageActionDto extends ActionDto {
         this.chatId = chatId;
     }
 
-    public SendMessageActionDto(int order, int id, String name, String message, String chatId) {
+    public SendMessageActionDto(int order, UUID id, String name, String message, String chatId) {
         super(order, id, name);
         this.message = message;
         this.chatId = chatId;

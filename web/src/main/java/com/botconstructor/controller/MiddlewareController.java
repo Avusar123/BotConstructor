@@ -18,21 +18,18 @@ public class MiddlewareController {
     MiddlewareService middlewareService;
 
     @PostMapping("/api/middleware")
-    public MiddlewareDto createBlock(@Valid @RequestBody MiddlewareDto middlewareDto,
-                                     @RequestParam int blockId,
-                                     @RequestParam UUID botId) {
-        return middlewareService.create(middlewareDto, blockId, botId);
+    public List<MiddlewareDto> createMiddleware(@Valid @RequestBody List<MiddlewareDto> middlewareDtoList,
+                                     @RequestParam UUID blockId) {
+        return middlewareService.createMany(middlewareDtoList, blockId);
     }
 
     @GetMapping("/api/middleware")
-    public MiddlewareDto getBlock(@RequestParam int id,
-                                  @RequestParam UUID botId) {
-        return middlewareService.get(id, botId);
+    public MiddlewareDto getMiddleware(@RequestParam UUID id) {
+        return middlewareService.get(id);
     }
 
     @GetMapping("/api/middleware/all")
-    public List<MiddlewareListElementDto> getAll(@RequestParam int blockId,
-                                                 @RequestParam UUID botId) {
-        return middlewareService.getAll(blockId, botId);
+    public List<MiddlewareListElementDto> getAll(@RequestParam UUID blockId) {
+        return middlewareService.getAll(blockId);
     }
 }

@@ -2,15 +2,17 @@ package com.botconstructor.model.processingblock;
 
 import com.botconstructor.model.event.EventType;
 import com.botconstructor.model.middleware.Middleware;
+import com.botconstructor.model.user.OwnedEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 
 import java.util.List;
+import java.util.UUID;
 
 @Entity
-public class ProcessingBlock implements Cloneable {
+public class ProcessingBlock extends OwnedEntity implements Cloneable {
     @OneToMany
     List<Middleware> middlewares;
     EventType eventType;
@@ -18,9 +20,9 @@ public class ProcessingBlock implements Cloneable {
     String name;
     @Id
     @GeneratedValue
-    private int id;
+    private UUID id;
 
-    public ProcessingBlock(List<Middleware> middlewares, EventType eventType, String name, int id) {
+    public ProcessingBlock(List<Middleware> middlewares, EventType eventType, String name, UUID id) {
         this.middlewares = middlewares;
         this.eventType = eventType;
         this.name = name;
@@ -57,11 +59,11 @@ public class ProcessingBlock implements Cloneable {
         this.eventType = eventType;
     }
 
-    public int getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

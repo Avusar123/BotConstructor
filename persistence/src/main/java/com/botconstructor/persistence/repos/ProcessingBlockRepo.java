@@ -12,13 +12,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface ProcessingBlockRepo extends JpaRepository<ProcessingBlock, Integer> {
+public interface ProcessingBlockRepo extends JpaRepository<ProcessingBlock, UUID> {
     @Query("SELECT b.processingBlocks FROM BotModel b WHERE b.Id = :botId")
     List<ProcessingBlock> findBlocks(@Param("botId") UUID botId);
-
-    @NotNull
-    @Query("SELECT block FROM BotModel bot " +
-           "JOIN bot.processingBlocks block " +
-           "WHERE bot.id = :botId AND block.id = :blockId")
-    Optional<ProcessingBlock> findByIdInBot(@Param("botId") UUID botId, @Param("blockId") int blockId);
 }

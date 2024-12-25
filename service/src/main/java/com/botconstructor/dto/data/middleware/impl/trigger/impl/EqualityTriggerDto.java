@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotEmpty;
 
+import java.util.UUID;
+
 public class EqualityTriggerDto extends TriggerDto {
     @JsonProperty(value = "first")
     @NotEmpty
@@ -29,7 +31,12 @@ public class EqualityTriggerDto extends TriggerDto {
         this.inverted = inverted;
     }
 
-    public EqualityTriggerDto(int order, int id, String firstValue, String lastValue, String name, boolean inverted) {
+    public EqualityTriggerDto(int order,
+                              UUID id,
+                              String firstValue,
+                              String lastValue,
+                              String name,
+                              boolean inverted) {
         super(order, id, name);
         this.firstValue = firstValue;
         this.lastValue = lastValue;

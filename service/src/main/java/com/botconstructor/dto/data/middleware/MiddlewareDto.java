@@ -3,18 +3,20 @@ package com.botconstructor.dto.data.middleware;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 
+import java.util.UUID;
+
 public abstract class MiddlewareDto {
     @JsonProperty("order")
     private int order;
 
     @JsonProperty("id")
-    private int id;
+    private UUID id;
 
     @JsonProperty("name")
     @NotBlank
     private String name;
 
-    public MiddlewareDto(int order, int id, String name) {
+    public MiddlewareDto(int order, UUID id, String name) {
         this.order = order;
         this.id = id;
         this.name = name;
@@ -39,11 +41,11 @@ public abstract class MiddlewareDto {
         this.order = order;
     }
 
-    public int getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
