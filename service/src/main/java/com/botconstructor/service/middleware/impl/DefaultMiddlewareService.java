@@ -67,7 +67,6 @@ public class DefaultMiddlewareService implements MiddlewareService {
         var validResult = Validations
                 .isValid(block.getMiddlewares()
                         .stream()
-                        .map(mid -> (Validatable) mid)
                         .toList());
 
         if (!validResult.result()) {
