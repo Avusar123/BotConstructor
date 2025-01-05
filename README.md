@@ -9,7 +9,7 @@
 ## Стек технологий
 
 - Java SE, Jakarta, Hibernate
-- JPA, PostgreSQL, Redis
+- JPA, PostgreSQL
 - Maven, Spring Boot, Spring DI
 - Spring Security, Spring MVC, Spring Web, Docker
 
